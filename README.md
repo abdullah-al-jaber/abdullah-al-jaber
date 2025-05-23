@@ -1,1 +1,1 @@
-***Python** is awesome ! **Fast** & **Slow** at the same time !*
+*Let it sink ! Let it float ! Let it rot !*
