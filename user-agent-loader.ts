@@ -85,7 +85,20 @@ const user_agent_loader = async () => {
 
     const tag_element = document.createElement("div");
     [tag_element.id, tag_element.innerText] = ["tag_element", user_agent_name];
-    const tag_element_style: Partial<CSSStyleDeclaration> = {};
+    const tag_element_style: Partial<CSSStyleDeclaration> = {
+      position: "fixed",
+      top: "100%",
+      left: "100%",
+      zIndex: "9999",
+      transform: "translate(-100% -100%)",
+      padding: "5px",
+      fontFamily: "monospace",
+      fontSize: "10px",
+      letterSpacing: "2px",
+      whiteSpace: "nowrap",
+      backgroundColor: "#404040",
+      color: "#f0f0f0",
+    };
     Object.assign(tag_element.style, tag_element_style);
     document.body.append(tag_element);
 
