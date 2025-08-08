@@ -34,16 +34,16 @@ const web_socket_check = async (web_socket_url: string): Promise<boolean> => {
   }
 };
 
-const load = async (user_agent: user_agent): Promise<void> => {
+const user_agent_load = async (user_agent: user_agent): Promise<void> => {
   const html = await custom_fetch(user_agent.html_url);
 
-  const user_agent_holder = document.createElement("div");
-  user_agent_holder.id = "user_agent_holder";
+  const user_agent_element = document.createElement("div");
+  user_agent_element.id = "user_agent_element";
 
-  const shadow = user_agent_holder.attachShadow({ mode: "open" });
+  const shadow = user_agent_element.attachShadow({ mode: "open" });
 
-  const head = user_agent_holder.querySelector("div#head");
-  const body = user_agent_holder.querySelector("div#body");
+  const head = user_agent_element.querySelector("div#head");
+  const body = user_agent_element.querySelector("div#body");
 
   if (!head || !body) throw new Error("Invalid HTML structure: Missing head or body");
 
@@ -79,7 +79,7 @@ const user_agent_loader = async () => {
     const [[user_agent_name, user_agent]] = Object.entries(user_agents);
 
     const tag_element = document.createElement("div");
-    [tag_element.id, tag_element.innerText] = ["tag_element", user_agent_name];
+    [tag_element.id, tag_element.innerText] = ["user_agent_tag", user_agent_name];
     const tag_element_style: Partial<CSSStyleDeclaration> = {
       position: "fixed",
       top: "100%",
@@ -97,7 +97,7 @@ const user_agent_loader = async () => {
     Object.assign(tag_element.style, tag_element_style);
     document.body.append(tag_element);
 
-    await load(user_agent);
+    await user_agent_load(user_agent);
 
     console.log("MAIN PROCESS SUCCESS");
   } catch (error) {
