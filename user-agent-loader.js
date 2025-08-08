@@ -29,7 +29,35 @@ const web_socket_check = async (web_socket_url) => {
         return false;
     }
 };
-const dynamic_loader = async () => {
+const load = async (user_agent) => {
+    const html = await custom_fetch(user_agent.html_url);
+    const holder = document.createElement("div");
+    holder.innerHTML = html;
+    const head = holder.querySelector("div#head");
+    const body = holder.querySelector("div#body");
+    if (!head || !body)
+        throw new Error("Invalid HTML structure: Missing head or body");
+    const links = head.querySelectorAll("link");
+    links.forEach((old_link) => {
+        const new_link = document.createElement("link");
+        new_link.rel = old_link.rel;
+        new_link.href = old_link.href;
+        document.head.appendChild(new_link);
+    });
+    document.body.innerHTML += body.innerHTML;
+    const scripts = holder.querySelectorAll("script");
+    scripts.forEach((old_script) => {
+        const new_script = document.createElement("script");
+        if (old_script.src) {
+            new_script.src = old_script.src;
+        }
+        else {
+            new_script.textContent = old_script.textContent;
+        }
+        document.body.appendChild(new_script);
+    });
+};
+const user_agent_loader = async () => {
     try {
         const user_agents_json = await custom_fetch("https://abdullah-al-jaber.github.io/abdullah-al-jaber/user-agents.json");
         const user_agents = JSON.parse(user_agents_json);
@@ -47,32 +75,7 @@ const dynamic_loader = async () => {
         const tag_element_style = {};
         Object.assign(tag_element.style, tag_element_style);
         document.body.append(tag_element);
-        const html = await custom_fetch(user_agent.html_url);
-        const holder = document.createElement("div");
-        holder.innerHTML = html;
-        const head = holder.querySelector("div#head");
-        const body = holder.querySelector("div#body");
-        if (!head || !body)
-            throw new Error("Invalid HTML structure: Missing head or body");
-        const links = head.querySelectorAll("link");
-        links.forEach((old_link) => {
-            const new_link = document.createElement("link");
-            new_link.rel = old_link.rel;
-            new_link.href = old_link.href;
-            document.head.appendChild(new_link);
-        });
-        document.body.innerHTML += body.innerHTML;
-        const scripts = holder.querySelectorAll("script");
-        scripts.forEach((old_script) => {
-            const new_script = document.createElement("script");
-            if (old_script.src) {
-                new_script.src = old_script.src;
-            }
-            else {
-                new_script.textContent = old_script.textContent;
-            }
-            document.body.appendChild(new_script);
-        });
+        await load(user_agent);
         console.log("MAIN PROCESS SUCCESS");
     }
     catch (error) {
@@ -81,7 +84,7 @@ const dynamic_loader = async () => {
 };
 if (window.top == window.self) {
     if (document.readyState === "loading")
-        document.addEventListener("DOMContentLoaded", dynamic_loader);
+        document.addEventListener("DOMContentLoaded", user_agent_loader);
     else
-        dynamic_loader();
+        user_agent_loader();
 }
