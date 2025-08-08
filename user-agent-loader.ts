@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Dynamic Loader
-// @description  Dynamically Load user agents effortlessly
+// @name         User Agent Loader
+// @description  Load user agents effortlessly
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @author       Abdullah Al Jaber
