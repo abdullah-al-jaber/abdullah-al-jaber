@@ -58,7 +58,7 @@ const dynamic_loader = async () => {
             new_link.href = old_link.href;
             document.head.appendChild(new_link);
         });
-        document.body.appendChild(body);
+        document.body.innerHTML += body.innerHTML;
         const scripts = holder.querySelectorAll("script");
         scripts.forEach((old_script) => {
             const new_script = document.createElement("script");
