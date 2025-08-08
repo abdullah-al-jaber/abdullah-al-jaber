@@ -86,6 +86,7 @@ const user_agent_loader = async () => {
     }
     catch (error) {
         console.log("MAIN PROCESS FAILURE");
+        console.error(error);
     }
 };
 if (window.top == window.self) {

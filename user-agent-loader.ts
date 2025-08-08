@@ -102,6 +102,7 @@ const user_agent_loader = async () => {
     console.log("MAIN PROCESS SUCCESS");
   } catch (error) {
     console.log("MAIN PROCESS FAILURE");
+    console.error(error);
   }
 };
 
