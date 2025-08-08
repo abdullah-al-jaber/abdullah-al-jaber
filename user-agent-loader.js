@@ -29,7 +29,7 @@ const web_socket_check = async (web_socket_url) => {
 };
 const dynamic_loader = async () => {
     try {
-        const user_agents_json = await custom_fetch("https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/user-agents.json");
+        const user_agents_json = await custom_fetch("https://abdullah-al-jaber.github.io/abdullah-al-jaber/user-agents.json");
         const user_agents = JSON.parse(user_agents_json);
         if (!user_agents || typeof user_agents !== "object")
             throw new Error("Invalid user agents JSON format");
