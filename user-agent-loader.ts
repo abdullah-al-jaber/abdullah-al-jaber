@@ -49,7 +49,7 @@ const load = async (user_agent: user_agent): Promise<void> => {
 
   const link_tags = Array.from(head.querySelectorAll("link"));
   for (const link_tag of link_tags) {
-    shadow.append(link_tag.cloneNode());
+    shadow.append(link_tag);
   }
 
   shadow.innerHTML += body.innerHTML;
@@ -58,7 +58,7 @@ const load = async (user_agent: user_agent): Promise<void> => {
   script_tags.forEach((old_tag) => {
     const new_tag = document.createElement("script");
     new_tag.src = old_tag.src;
-    shadow.appendChild(new_tag);
+    shadow.append(new_tag);
   });
 };
 
