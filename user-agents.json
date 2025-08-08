@@ -1,3 +1,6 @@
 {
-  "ws://localhost:9696": "https://abdullah-al-jaber.github.io/verse-vine/resource/verse-vine-client.html"
+  "verse-vine": {
+    "web_socket_url": "ws://localhost:9696",
+    "html_url": "https://abdullah-al-jaber.github.io/verse-vine/resource/verse-vine-client.html"
+  }
 }
