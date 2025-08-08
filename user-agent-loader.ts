@@ -37,33 +37,28 @@ const web_socket_check = async (web_socket_url: string): Promise<boolean> => {
 const load = async (user_agent: user_agent): Promise<void> => {
   const html = await custom_fetch(user_agent.html_url);
 
-  const holder = document.createElement("div");
-  holder.innerHTML = html;
+  const user_agent_holder = document.createElement("div");
+  user_agent_holder.id = "user_agent_holder";
 
-  const head = holder.querySelector("div#head");
-  const body = holder.querySelector("div#body");
+  const shadow = user_agent_holder.attachShadow({ mode: "open" });
+
+  const head = user_agent_holder.querySelector("div#head");
+  const body = user_agent_holder.querySelector("div#body");
 
   if (!head || !body) throw new Error("Invalid HTML structure: Missing head or body");
 
-  const links = head.querySelectorAll("link");
-  links.forEach((old_link) => {
-    const new_link = document.createElement("link");
-    new_link.rel = old_link.rel;
-    new_link.href = old_link.href;
-    document.head.appendChild(new_link);
-  });
+  const link_tags = Array.from(head.querySelectorAll("link"));
+  for (const link_tag of link_tags) {
+    shadow.append(link_tag.cloneNode());
+  }
 
-  document.body.innerHTML += body.innerHTML;
+  shadow.innerHTML += body.innerHTML;
 
-  const scripts = holder.querySelectorAll("script");
-  scripts.forEach((old_script) => {
-    const new_script = document.createElement("script");
-    if (old_script.src) {
-      new_script.src = old_script.src;
-    } else {
-      new_script.textContent = old_script.textContent;
-    }
-    document.body.appendChild(new_script);
+  const script_tags = head.querySelectorAll("script");
+  script_tags.forEach((old_tag) => {
+    const new_tag = document.createElement("script");
+    new_tag.src = old_tag.src;
+    shadow.appendChild(new_tag);
   });
 };
 
