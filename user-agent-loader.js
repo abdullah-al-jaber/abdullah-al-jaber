@@ -25,7 +25,7 @@ const web_socket_check = async (web_socket_url) => {
             resolve(false);
         };
     });
-    return promise;
+    return await promise;
 };
 const dynamic_loader = async () => {
     try {
