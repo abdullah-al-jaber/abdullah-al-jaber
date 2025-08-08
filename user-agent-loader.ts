@@ -40,8 +40,7 @@ const dynamic_loader = async () => {
     let web_socket_urls: string[] = Object.keys(user_agents);
     for (const web_socket_url of web_socket_urls) {
       if (typeof web_socket_url !== "string") continue;
-      if (!(await web_socket_check(web_socket_url)))
-        web_socket_urls = web_socket_urls.splice(web_socket_urls.indexOf(web_socket_url), 1);
+      if (!(await web_socket_check(web_socket_url))) web_socket_urls.splice(web_socket_urls.indexOf(web_socket_url), 1);
     }
 
     if (web_socket_urls.length != 1) throw new Error("No Single WebSocket URLs found!");
