@@ -35,6 +35,10 @@ const dynamic_loader = async () => {
         const user_agents = JSON.parse(user_agents_json);
         if (!user_agents || typeof user_agents !== "object")
             throw new Error("Invalid user agents JSON format");
+        for (const [user_agent_name, user_agent] of Object.entries(user_agents)) {
+            if (!(await web_socket_check(user_agent.web_socket_url)))
+                delete user_agents[user_agent_name];
+        }
         if (Object.keys(user_agents).length != 1)
             throw new Error("No user agent found!");
         const [[user_agent_name, user_agent]] = Object.entries(user_agents);
