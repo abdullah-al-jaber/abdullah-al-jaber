@@ -8,6 +8,12 @@
 // @run-at       document-idle
 // ==/UserScript==
 
+const custom_fetch = async (url: string): Promise<string> => {
+  let response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  return response.text();
+};
+
 const web_socket_check = async (web_socket_url: string): Promise<boolean> => {
   let promise = new Promise<boolean>((resolve) => {
     const web_socket = new WebSocket(web_socket_url);
@@ -24,27 +30,28 @@ const web_socket_check = async (web_socket_url: string): Promise<boolean> => {
 
 const dynamic_loader = async () => {
   try {
-    const json = await fetch("")
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    const data = await response.json();
+    const user_agents_json = await custom_fetch(
+      "https://cdn.jsdelivr.net/gh/abdullah-al-jaber/abdullah-al-jaber@vanilla/user-agents.json"
+    );
 
-    let all_ports = Object.keys(data).map(Number);
-    let working_ports: number[] = [];
-    for (let port of all_ports) {
-      const web_socket_url = `ws://localhost:${port}/`;
-      if (await check_web_socket(web_socket_url)) working_ports.push(port);
+    const user_agents = JSON.parse(user_agents_json);
+    if (!user_agents || typeof user_agents !== "object") throw new Error("Invalid user agents JSON format");
+
+    let web_socket_urls: string[] = Object.keys(user_agents);
+    for (const web_socket_url of web_socket_urls) {
+      if (typeof web_socket_url !== "string") continue;
+      if (!(await web_socket_check(web_socket_url)))
+        web_socket_urls = web_socket_urls.splice(web_socket_urls.indexOf(web_socket_url), 1);
     }
-    if (working_ports.length > 1) throw new Error("Multiple working ports found !");
 
-    const html_url = data[working_ports[0]];
-    if (!html_url) throw new Error("No HTML URL found for the working port!");
+    if (web_socket_urls.length != 1) throw new Error("No Single WebSocket URLs found!");
+    const web_socket_url = web_socket_urls[0];
 
-    const html = await fetch(html_url);
-    if (!html.ok) throw new Error(`Failed to fetch HTML: ${html.statusText}`);
+    const html_url = user_agents[web_socket_url];
+    const html = await custom_fetch(html_url);
 
     const holder = document.createElement("div");
-    holder.innerHTML = await html.text();
+    holder.innerHTML = html;
 
     const head = holder.querySelector("div#head");
     const body = holder.querySelector("div#body");
