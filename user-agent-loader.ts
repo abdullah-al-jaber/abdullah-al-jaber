@@ -36,14 +36,16 @@ const web_socket_check = async (web_socket_url: string): Promise<boolean> => {
 
 const user_agent_load = async (user_agent: user_agent): Promise<void> => {
   const html = await custom_fetch(user_agent.html_url);
+  const html_holder = document.createElement("div");
+  html_holder.innerHTML = html;
 
   const user_agent_element = document.createElement("div");
   user_agent_element.id = "user_agent_element";
 
   const shadow = user_agent_element.attachShadow({ mode: "open" });
 
-  const head = user_agent_element.querySelector("div#head");
-  const body = user_agent_element.querySelector("div#body");
+  const head = html_holder.querySelector("div#head");
+  const body = html_holder.querySelector("div#body");
 
   if (!head || !body) throw new Error("Invalid HTML structure: Missing head or body");
 
