@@ -41,7 +41,10 @@ const user_agent_load = async (user_agent: user_agent): Promise<void> => {
 
   const user_agent_element = document.createElement("div");
   user_agent_element.id = "user_agent_element";
-  const reset_styles = {};
+  const reset_styles: Partial<CSSStyleDeclaration> = {
+    all: "initial",
+    display: "block",
+  };
   Object.assign(user_agent_element.style, reset_styles);
   document.body.append(user_agent_element);
 

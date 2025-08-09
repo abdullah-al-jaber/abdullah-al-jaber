@@ -37,6 +37,7 @@ const user_agent_load = async (user_agent) => {
     user_agent_element.id = "user_agent_element";
     const reset_styles = {
         all: "initial",
+        display: "block",
     };
     Object.assign(user_agent_element.style, reset_styles);
     document.body.append(user_agent_element);
