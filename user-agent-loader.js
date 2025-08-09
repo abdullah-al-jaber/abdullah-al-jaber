@@ -35,6 +35,17 @@ const user_agent_load = async (user_agent) => {
     html_holder.innerHTML = html;
     const user_agent_element = document.createElement("div");
     user_agent_element.id = "user_agent_element";
+    const reset_styles = {
+        all: "initial",
+        boxSizing: "border-box",
+        margin: "0",
+        padding: "0",
+        fontFamily: "system-ui, sans-serif",
+        lineHeight: "1.5",
+        textDecoration: "none",
+        color: "inherit",
+    };
+    Object.assign(user_agent_element.style, reset_styles);
     document.body.append(user_agent_element);
     const shadow = user_agent_element.attachShadow({ mode: "open" });
     const head = html_holder.querySelector("div#head");
