@@ -51,7 +51,7 @@ const user_agent_load = async (user_agent: user_agent): Promise<void> => {
 
   const link_tags = Array.from(head.querySelectorAll("link"));
   for (const link_tag of link_tags) {
-    shadow.append(link_tag);
+    shadow.append(link_tag.cloneNode(true));
   }
 
   shadow.innerHTML += body.innerHTML;
