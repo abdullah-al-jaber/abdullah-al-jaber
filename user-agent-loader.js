@@ -45,7 +45,6 @@ const user_agent_load = async (user_agent) => {
     link_tags.forEach((old_tag) => {
         const new_tag = document.createElement("link");
         [new_tag.rel, new_tag.href] = [old_tag.rel, old_tag.href];
-        new_tag.crossOrigin = "anonymous";
         shadow.append(new_tag);
     });
     shadow.innerHTML += body.innerHTML;
