@@ -87,7 +87,7 @@ const user_agent_loader = async () => {
       top: "100%",
       left: "100%",
       zIndex: "9999",
-      transform: "translate(-100% -100%)",
+      transform: "translate(-100%, -100%)",
       padding: "5px",
       fontFamily: "monospace",
       fontSize: "10px",
