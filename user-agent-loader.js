@@ -41,13 +41,12 @@ const user_agent_load = async (user_agent) => {
     const body = html_holder.querySelector("div#body");
     if (!head || !body)
         throw new Error("Invalid HTML structure: Missing head or body");
-    const link_tags = Array.from(head.querySelectorAll("link"));
-    for (const link_tag of link_tags) {
-        if (link_tag.sheet)
-            shadow.append(link_tag.cloneNode(true));
-        else
-            link_tag.addEventListener("load", () => shadow.append(link_tag.cloneNode(true)));
-    }
+    const link_tags = head.querySelectorAll("link");
+    link_tags.forEach((old_tag) => {
+        const new_tag = document.createElement("link");
+        [new_tag.rel, new_tag.href] = [old_tag.rel, old_tag.href];
+        shadow.append(new_tag);
+    });
     shadow.innerHTML += body.innerHTML;
     const script_tags = head.querySelectorAll("script");
     script_tags.forEach((old_tag) => {
