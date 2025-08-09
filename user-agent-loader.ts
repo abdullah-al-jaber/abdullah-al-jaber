@@ -41,16 +41,7 @@ const user_agent_load = async (user_agent: user_agent): Promise<void> => {
 
   const user_agent_element = document.createElement("div");
   user_agent_element.id = "user_agent_element";
-  const reset_styles = {
-    all: "initial",
-    boxSizing: "border-box",
-    margin: "0",
-    padding: "0",
-    fontFamily: "system-ui, sans-serif",
-    lineHeight: "1.5",
-    textDecoration: "none",
-    color: "inherit",
-  };
+  const reset_styles = {};
   Object.assign(user_agent_element.style, reset_styles);
   document.body.append(user_agent_element);
 
