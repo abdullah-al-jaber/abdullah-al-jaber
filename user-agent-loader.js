@@ -35,6 +35,7 @@ const user_agent_load = async (user_agent) => {
     html_holder.innerHTML = html;
     const user_agent_element = document.createElement("div");
     user_agent_element.id = "user_agent_element";
+    document.body.append(user_agent_element);
     const shadow = user_agent_element.attachShadow({ mode: "open" });
     const head = html_holder.querySelector("div#head");
     const body = html_holder.querySelector("div#body");

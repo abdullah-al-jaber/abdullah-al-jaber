@@ -41,6 +41,7 @@ const user_agent_load = async (user_agent: user_agent): Promise<void> => {
 
   const user_agent_element = document.createElement("div");
   user_agent_element.id = "user_agent_element";
+  document.body.append(user_agent_element);
 
   const shadow = user_agent_element.attachShadow({ mode: "open" });
 
