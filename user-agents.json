@@ -1,10 +1,10 @@
 {
   "verse-vine": {
     "web_socket_url": "ws://localhost:9696",
-    "html_url": "https://abdullah-al-jaber.github.io/verse-vine/resource/verse-vine-client.html"
+    "html_file_url": "https://abdullah-al-jaber.github.io/verse-vine/resource/verse-vine-client.html"
   },
   "verse-lingua": {
     "web_socket_url": "ws://localhost:6969",
-    "html_url": "https://abdullah-al-jaber.github.io/verse-lingua/resource/verse-vine-lingua.html"
+    "html_file_url": "https://abdullah-al-jaber.github.io/verse-lingua/resource/verse-vine-lingua.html"
   }
 }
