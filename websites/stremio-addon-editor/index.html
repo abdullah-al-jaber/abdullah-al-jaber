@@ -3,6 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>Stremio Addon Editor</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/javascript/javascript.min.js"></script>
+
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
   </head>
@@ -10,7 +17,7 @@
     <div id="title-box"><span class="title">Stremio Addon Editor</span></div>
 
     <div id="login-box">
-      <form onsubmit="return login(event)">
+      <form onsubmit="login(event)">
         <input id="email" type="email" placeholder="Email" required />
         <input id="password" placeholder="Password" required />
         <button type="submit">Login & Load Addons</button>
@@ -20,7 +27,7 @@
     <div id="addon-box">
       <span class="title">Addons (JSON)</span>
       <hr />
-      <textarea id="addons" placeholder="Streamio Addon JSON"></textarea>
+      <div id="addons"></div>
       <button onclick="save()">Save to Stremio</button>
     </div>
   </body>
