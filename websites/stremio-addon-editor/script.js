@@ -6,39 +6,50 @@ const post = (url, body) =>
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-  }).then((r) => r.json());
+  }).then((res) => res.json());
 
 async function login(event) {
   event?.preventDefault();
-  const email = document.querySelector("input#email").value;
-  const password = document.querySelector("input#password").value;
-  const r = await post(API + "login", { type: "Login", email, password });
-  authKey = r?.result?.authKey;
-  if (!authKey) return window.alert("Login & Load Addons Failed !");
 
-  const a = await post(API + "addonCollectionGet", {
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
+  const addons = document.querySelector("#addons");
+
+  const response = await post(API + "login", {
+    type: "Login",
+    email,
+    password,
+  });
+  authKey = response?.result?.authKey;
+
+  if (!authKey) return alert("Login & Load Addons Failed!");
+
+  const addonsResponse = await post(API + "addonCollectionGet", {
     type: "AddonCollectionGet",
     authKey,
   });
 
-  addons.value = JSON.stringify(a.result.addons, null, 2);
+  addons.value = JSON.stringify(addonsResponse.result.addons, null, 2);
 }
 
 async function save() {
-  if (!authKey) return window.alert("Please Login & Load Addons First !");
+  const addons = document.querySelector("#addons");
+  if (!authKey) return alert("Please Login & Load Addons First!");
+
   let parsed;
   try {
     parsed = JSON.parse(addons.value);
   } catch {
-    return window.alert("INVALID ADDON JSON !");
+    return alert("INVALID ADDON JSON!");
   }
 
-  const r = await post(API + "addonCollectionSet", {
+  await post(API + "addonCollectionSet", {
     type: "AddonCollectionSet",
     authKey,
     addons: parsed,
   });
 
-  window.alert("Successfully Saved to Stremio !");
-  await login();
+  alert("Successfully Saved to Stremio!");
+  addons.value = "";
+  authKey = null;
 }
