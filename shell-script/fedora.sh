@@ -9,5 +9,10 @@ if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then
   exec su - retro-boy
 fi
 EOF
+cat <<'EOF'>> ~/.bash_profile
+if [ -f ~/.bashrc ]; then
+  source ~/.bashrc
+fi
+EOF
 history -c && > ~/.bash_history && history -w
 exit
