@@ -14,5 +14,11 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
+sudo -u retro-boy "chsh -s /usr/bin/fish"
+sudo -u retro-boy "fish -c 'echo'"
+dnf copr enable atim/starship -y
+dnf install -y starship
+sudo -u retro-boy "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
+sudo -u retro-boy "starship preset bracketed-segments -o ~/.config/starship.toml"
 history -c && > ~/.bash_history && history -w
 exit
