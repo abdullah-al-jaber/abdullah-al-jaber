@@ -5,7 +5,7 @@ mv ../usr/etc/motd ../usr/etc/motd.bk
 pkg install -y proot-distro
 proot-distro install fedora
 proot-distro clear-cache
-echo -e "\n"
-curl -L https://example.com/file.zip -o file.zip
-unzip file.zip
-rm file.zip
+curl -L https://abdullah-al-jaber.github.io/asset/archive/termux.zip -o termux.zip
+unzip termux.zip
+rm termux.zip
+exit
