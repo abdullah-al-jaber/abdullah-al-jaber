@@ -9,4 +9,5 @@ if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then
   exec su - retro-boy
 fi
 EOF
-exit 
+history -c && > ~/.bash_history && history -w
+exit
