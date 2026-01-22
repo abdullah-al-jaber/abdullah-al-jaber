@@ -14,8 +14,8 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
-sudo -u retro-boy sh -c "chsh -s /usr/bin/fish"
-sudo -u retro-boy sh -c "fish -c 'set -U fish_greeting'"
+chsh -s /usr/bin/fish retro-boy
+sudo -u retro-boy fish -c 'set -U fish_greeting'
 dnf copr enable atim/starship -y
 dnf install -y starship
 sudo -u retro-boy sh -c  "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
