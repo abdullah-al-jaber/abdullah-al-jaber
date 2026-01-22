@@ -9,4 +9,5 @@ proot-distro clear-cache
 curl -L https://abdullah-al-jaber.github.io/asset/archive/termux.zip -o termux.zip
 unzip -o termux.zip
 rm termux.zip
+history -c && > ~/.bash_history && history -w
 exit
