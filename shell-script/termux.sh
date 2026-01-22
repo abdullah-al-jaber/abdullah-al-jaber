@@ -1,4 +1,4 @@
-# curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/termux.sh | sh
+# source <(curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/termux.sh)
 cd ~
 termux-change-repo
 yes | pkg upgrade
@@ -9,4 +9,4 @@ proot-distro clear-cache
 curl -L https://abdullah-al-jaber.github.io/asset/archive/termux.zip -o termux.zip
 unzip -o termux.zip
 rm termux.zip
-kill -9 $PPID
+exit
