@@ -1,7 +1,7 @@
 # source <(curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/fedora.sh)
 rm /etc/yum.repos.d/fedora-cisco-openh264.repo
 dnf upgrade -y
-dnf install -y nodejs python pip fish openssl nano neovim
+dnf install -y nodejs npm python pip fish openssl nano neovim glibc-langpack-en
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
 echo "retro-boy ALL=(ALL) ALL" >> /etc/sudoers
 cat <<'EOF' >> /root/.bashrc
@@ -16,6 +16,7 @@ fi
 EOF
 chsh -s /usr/bin/fish retro-boy
 sudo -u retro-boy fish -c 'set -U fish_greeting'
+sudo -u retro-boy fish -c 'set -Ux LANG en_US.UTF-8'
 dnf copr enable atim/starship -y
 dnf install -y starship
 sudo -u retro-boy sh -c  "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
