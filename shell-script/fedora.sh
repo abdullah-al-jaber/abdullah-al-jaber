@@ -15,8 +15,9 @@ if [ -f ~/.bashrc ]; then
 fi
 EOF
 chsh -s /usr/bin/fish retro-boy
-sudo -u retro-boy fish -c 'set -U fish_greeting'
-sudo -u retro-boy fish -c 'set -Ux LANG en_US.UTF-8'
+sudo -u retro-boy fish -c "set -U fish_greeting"
+sudo -u retro-boy fish -c "set -Ux LANG en_US.UTF-8"
+sudo -u retro-boy fish -c "alias --save clear-history='yes yes | history clear'"
 dnf copr enable atim/starship -y
 dnf install -y starship
 sudo -u retro-boy sh -c  "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
