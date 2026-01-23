@@ -21,5 +21,6 @@ dnf copr enable atim/starship -y
 dnf install -y starship
 sudo -u retro-boy sh -c  "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
 sudo -u retro-boy sh -c  "starship preset bracketed-segments -o ~/.config/starship.toml"
+sudo -u retro-boy sh -c  "sed -i '2i scan_timeout = 0' ~/.config/starship.toml"
 history -c && > ~/.bash_history && history -w
 exit
