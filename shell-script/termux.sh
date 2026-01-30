@@ -19,6 +19,7 @@ sed -i \
 	.termux/termux.properties
 cat <<'EOF' >>~/.bashrc
 alias fedora='proot-distro login fedora --bind /sdcard:/android --isolated'
+alias clear-history='history -c && history -w'
 fedora
 EOF
 history -c && >~/.bash_history && history -w
