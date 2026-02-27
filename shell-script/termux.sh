@@ -3,7 +3,7 @@ cd ~
 termux-change-repo
 yes | pkg upgrade
 mv ../usr/etc/motd ../usr/etc/motd.bk
-pkg install -y proot-distro
+pkg install -y proot-distro fish starship
 proot-distro install fedora
 proot-distro clear-cache
 curl -L https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o .termux/colors.properties
@@ -15,12 +15,13 @@ sed -i \
 	-e 's/^# use-black-ui = true$/use-black-ui = true/' \
 	-e 's/^# bell-character = ignore$/bell-character = ignore/' \
 	-e 's/^# terminal-margin-horizontal=3$/terminal-margin-horizontal=5/' \
-	-e 's/^# terminal-margin-vertical=0$/terminal-margin-vertical=10/' \
+	-e 's/^# terminal-margin-vertical=0$/terminal-margin-vertical=5/' \
 	.termux/termux.properties
-cat <<'EOF' >>~/.bashrc
-alias fedora='proot-distro login fedora --bind /sdcard:/android --isolated'
-alias clear-history='history -c && history -w'
-fedora
-EOF
+chsh -s fish
+fish -c "alias -- save fedora='proot-distro login fedora --bind /sdcard:/android --isolated'"
+fish -c "alias --save clear-history='history -c && history -w'"
+fish -c "set -U fish_greeting"
+echo >> ~/.config/fish/config.fish
+echo "starship init fish | source" >> ~/.config/fish/config.fish
 history -c && >~/.bash_history && history -w
 exit
