@@ -1,5 +1,5 @@
 # source <(curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/fedora.sh)
-rm /etc/yum.repos.d/fedora-cisco-openh264.repo
+rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo
 dnf upgrade -y
 dnf install -y nodejs npm python pip fish openssl nano neovim glibc-langpack-en ncurses wget
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
