@@ -1,3 +1,4 @@
+import time
 import playwright.sync_api
 import playwright_stealth_plugin
 
@@ -14,12 +15,13 @@ def chat(text: str, page: playwright.sync_api.Page) -> str:
     page.click(chat_button_selector)
     page.wait_for_selector(voice_button_selector)
     page.wait_for_selector(chat_box_selector)
+    time.sleep(2)
     return page.locator(chat_box_selector).nth(-1).inner_text().strip() or "NO RESPONSE FOUND"
 
 
 with playwright.sync_api.sync_playwright() as pm:
     playwright_stealth_plugin.sync_apply(pm)
-    context = pm.chromium.launch_persistent_context("data", headless=False)
+    context = pm.chromium.launch_persistent_context("data", headless=True)
     page = context.new_page()
     page.goto("https://chatgpt.com/", wait_until="load")
     print(chat("What is the capital of France ?", page))
