@@ -1,6 +1,9 @@
 import asyncio
 import playwright.async_api
 import playwright_stealth_plugin
+import rich.traceback
+
+rich.traceback.install(show_locals=True)
 
 text_box_selector = "div#prompt-textarea > p"
 chat_button_selector = "button[aria-label='Send prompt']"
@@ -34,8 +37,8 @@ async def tts(text: str, page: playwright.async_api.Page) -> bytes:
 
 
 def save_audio(audio_bytes: bytes, filename: str):
-    with open(filename, "wb") as f:
-        f.write(audio_bytes)
+    with open(filename, "wb") as file:
+        file.write(audio_bytes)
 
 
 async def main():
@@ -43,13 +46,22 @@ async def main():
         await playwright_stealth_plugin.async_apply(pm)
         context = await pm.chromium.launch_persistent_context("data", headless=False)
         page = await context.new_page()
-        await page.goto("https://chatgpt.com/", wait_until="load")
-        story = await chat("Tell me a story !!", page)
-        await chat("Repeat what say from now on !! Nothing else !!", page)
-        audio_bytes = await tts(story, page)
-        save_audio(audio_bytes, "output.acc")
-        input("Press enter to exit !")
-        await context.close()
+        try:
+            await page.goto("https://chatgpt.com/", wait_until="load")
+            input("Please ensure you are logged in and press enter to continue...")
+            story = await chat("Tell me a story !! Big One...  200 words.", page)
+            rich.print("Story received from ChatGPT:")
+            await chat("Repeat what I say from now on !! Nothing else !!", page)
+            rich.print("TTS starting...")
+            audio_bytes = await tts(story, page)
+            rich.print("Audio received, saving to output.acc")
+            save_audio(audio_bytes, "output.acc")
+            input("Press enter to exit !")
+        except Exception as error:
+            await page.screenshot(path="error_screenshot.png", full_page=True)
+            raise error
+        finally:
+            await context.close()
 
 
 if __name__ == "__main__":
