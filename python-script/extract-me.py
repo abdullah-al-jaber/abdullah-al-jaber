@@ -65,7 +65,7 @@ def main():
     zip_url = console.input(" [ ZIP URL ] ")
     zip_name = download_zip(zip_url)
     zip_folder = extract_zip(zip_name)
-    console.print(rich.panel.Panel(f"OUTPUT: {zip_name}", title="[ DONE ]"))
+    console.print(rich.panel.Panel(f"OUTPUT: {zip_folder}", title="[ DONE ]"))
 
 
 if __name__ == "__main__":
