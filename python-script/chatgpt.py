@@ -49,7 +49,7 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
         console.print("Authorize on Your Phone ! Quick !")
 
 
-async def chat(text: str, page: playwright.async_api.Page, timeout: float = 70000) -> str:
+async def chat(text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
     await page.fill(selector["prompt_textarea"], text)
     await asyncio.sleep(min(len(text) * 0.05, 5))
     await page.click(selector["chat_button"])
@@ -57,7 +57,7 @@ async def chat(text: str, page: playwright.async_api.Page, timeout: float = 7000
     return (await page.locator(selector["assistant_message"]).nth(-1).inner_text()).strip() or "NO RESPONSE FOUND"
 
 
-async def tts(text: str, page: playwright.async_api.Page, timeout: float = 70000) -> bytes:
+async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000) -> bytes:
     await chat(f"REPEAT TEXT: {text}", page, timeout=timeout)
     await page.click(selector["more_actions_button"])
     async with page.expect_response(lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=timeout) as resp_info:
@@ -70,7 +70,7 @@ async def tts(text: str, page: playwright.async_api.Page, timeout: float = 70000
 async def main():
     async with playwright.async_api.async_playwright() as pm:
         await playwright_stealth_plugin.async_apply(pm)
-        context = await pm.chromium.launch_persistent_context("data", headless=True)
+        context = await pm.chromium.launch_persistent_context("chatgpt-data", headless=True)
         page = await context.new_page()
         try:
             await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
@@ -81,10 +81,10 @@ async def main():
                 await login(email, password, page)
                 assert await account_check(page), "LOGIN FAILURE !"
             console.print("Welcome to ChatGPT CLI !")
-            await chat("Hello? Are you OK ?", page)
+            console.print(await chat(console.input("PROMPT"), page))
         except Exception as error:
             await page.screenshot(path="error_screenshot.png", full_page=True)
-            console.print("SCREENSHOT: [cyan]error_screenshot.png[/cyan]")
+            console.print("ERROR_SCREENSHOT: [cyan]error_screenshot.png[/cyan] !")
             raise error
         finally:
             await context.close()
