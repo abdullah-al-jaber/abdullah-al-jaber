@@ -15,15 +15,13 @@ console = rich.console.Console()
 rich.traceback.install(console=console, show_locals=True)
 sys.stderr = open("/dev/null", "w")
 
-separator = "●"
-
 
 def download_zip(zip_url: str) -> str:
     progress = rich.progress.Progress(
         rich.progress.TaskProgressColumn(),
-        rich.progress.TextColumn(separator),
+        rich.progress.TextColumn("●"),
         rich.progress.TransferSpeedColumn(),
-        rich.progress.TextColumn(separator),
+        rich.progress.TextColumn("●"),
         rich.progress.TimeRemainingColumn(),
     )
     panel = rich.panel.Panel(progress, title="[ DOWNLOAD ]", expand=False, width=40)
@@ -42,9 +40,9 @@ def download_zip(zip_url: str) -> str:
 def extract_zip(zip_file_name: str) -> str:
     progress = rich.progress.Progress(
         rich.progress.TaskProgressColumn(),
-        rich.progress.TextColumn(separator),
+        rich.progress.TextColumn("●"),
         rich.progress.TransferSpeedColumn(),
-        rich.progress.TextColumn(separator),
+        rich.progress.TextColumn("●"),
         rich.progress.TimeRemainingColumn(),
         expand=False,
     )
