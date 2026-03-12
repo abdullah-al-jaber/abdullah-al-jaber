@@ -25,8 +25,9 @@ selector = {
     "prompt_textarea": "div#prompt-textarea > p",
     "chat_button": "button[aria-label='Send prompt']",
     "voice_button": "button[aria-label='Start Voice']",
-    "assistant_message": "[data-message-author-role='assistant']",
-    "more_actions_button": "article[data-turn-id^='request-WEB']:last-of-type button[aria-label='More actions']",
+    "assistant_message": "article:last-of-type [data-message-author-role='assistant']",
+    "copy_response_button": "article:last-of-type button[aria-label='Copy response']",
+    "more_actions_button": "article:last-of-type button[aria-label='More actions']",
     "read_aloud_button": "[data-radix-popper-content-wrapper] div[role='menuitem'][aria-label='Read aloud']",
 }
 
@@ -49,12 +50,16 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
         console.print("Authorize on Your Phone ! Quick !")
 
 
-async def chat(text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
-    await page.fill(selector["prompt_textarea"], text)
-    await asyncio.sleep(min(len(text) * 0.05, 5))
+async def chat(response_text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
+    await page.fill(selector["prompt_textarea"], response_text)
+    await asyncio.sleep(min(len(response_text) * 0.05, 5))
     await page.click(selector["chat_button"])
     await page.wait_for_selector(selector["voice_button"], timeout=timeout)
-    return (await page.locator(selector["assistant_message"]).nth(-1).inner_text()).strip() or "NO RESPONSE FOUND"
+    await page.click(selector["copy_response_button"])
+    response_text = (
+        str(await page.evaluate("navigator.clipboard.readText()")) or await page.locator(selector["assistant_message"]).nth(-1).inner_text()
+    )
+    return response_text or "NO RESPONSE FOUND"
 
 
 async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000) -> bytes:
@@ -81,7 +86,8 @@ async def main():
                 await login(email, password, page)
                 assert await account_check(page), "LOGIN FAILURE !"
             console.print("Welcome to ChatGPT CLI !")
-            console.print(await chat(console.input("PROMPT"), page))
+            console.print(await chat("Hello, write python script to print hello world!", page))
+            console.input("PRESS TO EXIT")
         except Exception as error:
             await page.screenshot(path="error_screenshot.png", full_page=True)
             console.print("ERROR_SCREENSHOT: [cyan]error_screenshot.png[/cyan] !")
