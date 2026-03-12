@@ -2,6 +2,7 @@ import sys
 import asyncio
 
 import rich.console
+import rich.markdown
 import rich.traceback
 import playwright.async_api
 import playwright_stealth_plugin
@@ -25,7 +26,6 @@ selector = {
     "prompt_textarea": "div#prompt-textarea > p",
     "chat_button": "button[aria-label='Send prompt']",
     "voice_button": "button[aria-label='Start Voice']",
-    "assistant_message": "article:last-of-type [data-message-author-role='assistant']",
     "copy_response_button": "article:last-of-type button[aria-label='Copy response']",
     "more_actions_button": "article:last-of-type button[aria-label='More actions']",
     "read_aloud_button": "[data-radix-popper-content-wrapper] div[role='menuitem'][aria-label='Read aloud']",
@@ -33,7 +33,7 @@ selector = {
 
 
 async def account_check(page: playwright.async_api.Page) -> bool:
-    await page.goto(url["homepage"], wait_until="networkidle", timeout=60000) if page.url != url["homepage"] else None
+    if page.url != url["homepage"]: await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
     return any(cookie.get("name") == "oai-gn" and cookie.get("value") == "Jaber" for cookie in await page.context.cookies())
 
 
@@ -50,14 +50,12 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
         console.print("Authorize on Your Phone ! Quick !")
 
 
-async def chat(response_text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
-    await page.fill(selector["prompt_textarea"], response_text)
-    await asyncio.sleep(min(len(response_text) * 0.05, 5))
+async def chat(message_text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
+    await page.fill(selector["prompt_textarea"], message_text)
     await page.click(selector["chat_button"])
     await page.wait_for_selector(selector["voice_button"], timeout=timeout)
     await page.click(selector["copy_response_button"])
-    response_text = await page.evaluate("navigator.clipboard.readText()") or await page.locator(selector["assistant_message"]).nth(-1).inner_text()
-    return response_text or "NO RESPONSE FOUND"
+    return await page.evaluate("navigator.clipboard.readText()") or "NO RESPONSE FOUND"
 
 
 async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000) -> bytes:
@@ -65,15 +63,13 @@ async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000
     await page.click(selector["more_actions_button"])
     async with page.expect_response(lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=timeout) as resp_info:
         await page.click(selector["read_aloud_button"])
-    response = await resp_info.value
-    audio_bytes = await response.body()
-    return audio_bytes
+    return await (await resp_info.value).body()
 
 
 async def main():
     async with playwright.async_api.async_playwright() as pm:
         await playwright_stealth_plugin.async_apply(pm)
-        context = await pm.chromium.launch_persistent_context("chatgpt-data", permissions=["clipboard-read", "clipboard-write"])
+        context = await pm.chromium.launch_persistent_context("chatgpt-data", headless=True, permissions=["clipboard-read", "clipboard-write"])
         page = await context.new_page()
         try:
             await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
@@ -84,8 +80,25 @@ async def main():
                 await login(email, password, page)
                 assert await account_check(page), "LOGIN FAILURE !"
             console.print("Welcome to ChatGPT CLI !")
-            console.print(await chat("Hello, write python script to print hello world!", page))
-            console.input("PRESS TO EXIT")
+            while True:
+                console.rule("[USER]", characters="=", style="green")
+                user_text = console.input("[PROMPT] > ")
+                if not user_text.startswith("/"): console.print("INVALID ! Must start with '/' !"); continue
+                match user_text.split(maxsplit=1):
+                    case ["/chat", message]:
+                        chatgpt_text = await chat(message, page)
+                        console.rule("[CHATGPT]", characters="═", style="cyan")
+                        console.print(rich.markdown.Markdown(chatgpt_text))
+                    case ["/tts", message]:
+                        chatgpt_audio = await tts(message, page)
+                        console.rule("[CHATGPT]", characters="═",style="magenta")
+                        console.print("Please enter FILE PATH for audio file (AAC) !")
+                        with open(console.input("[AUDIO_PATH] (audio.aac) > "), "wb") as audio_file:
+                            audio_file.write(chatgpt_audio)
+                    case ["/exit"]:
+                        console.print("AS YOU WISH !"); break
+                    case _:
+                        console.print("INVALID ! Use /chat, /tts, /exit !")
         except Exception as error:
             await page.screenshot(path="error_screenshot.png", full_page=True)
             console.print("ERROR_SCREENSHOT: [cyan]error_screenshot.png[/cyan] !")
