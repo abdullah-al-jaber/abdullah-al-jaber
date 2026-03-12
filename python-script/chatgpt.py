@@ -116,5 +116,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    rich.prompt.Prompt.ask("pass: ", password=True)
     asyncio.run(main())
