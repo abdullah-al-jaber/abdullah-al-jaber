@@ -98,12 +98,13 @@ async def main():
                         console.print(rich.markdown.Markdown(chatgpt_text))
                     case ["/tts", message]:
                         chatgpt_audio = await tts(message, page)
-                        console.rule("[CHATGPT]", characters="═",style="magenta")
+                        console.rule("[CHATGPT]", characters="═", style="magenta")
                         console.print("Please enter FILE PATH for audio file (AAC) !")
                         with open(rich.prompt.Prompt.ask("[AUDIO_PATH] (audio.aac) > "), "wb") as audio_file:
                             audio_file.write(chatgpt_audio)
                     case ["/exit"]:
-                        console.print("AS YOU WISH !"); break
+                        console.print("AS YOU WISH ! MY LIFE MAY PERISH !")
+                        break
                     case _:
                         console.print("INVALID ! Use /chat, /tts, /exit !")
         except Exception as error:
