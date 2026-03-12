@@ -56,9 +56,7 @@ async def chat(response_text: str, page: playwright.async_api.Page, timeout: flo
     await page.click(selector["chat_button"])
     await page.wait_for_selector(selector["voice_button"], timeout=timeout)
     await page.click(selector["copy_response_button"])
-    response_text = (
-        str(await page.evaluate("navigator.clipboard.readText()")) or await page.locator(selector["assistant_message"]).nth(-1).inner_text()
-    )
+    response_text = await page.evaluate("navigator.clipboard.readText()") or await page.locator(selector["assistant_message"]).nth(-1).inner_text()
     return response_text or "NO RESPONSE FOUND"
 
 
