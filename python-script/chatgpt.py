@@ -41,9 +41,11 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
     await page.goto(url["login"], wait_until="load")
     await page.wait_for_url(url["email_login"], wait_until="load")
     await page.fill(selector["email_input_field"], email)
+    await page.locator(selector["submit_button"]).scroll_into_view_if_needed()
     await page.locator(selector["submit_button"]).click()
     await page.wait_for_url(url["password_login"], wait_until="load")
     await page.fill(selector["password_input_field"], password)
+    await page.locator(selector["submit_button"]).scroll_into_view_if_needed()
     await page.locator(selector["submit_button"]).click()
     await page.wait_for_url(url["push_auth"], wait_until="load")
     async with page.expect_navigation(timeout=180000):
@@ -52,16 +54,20 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
 
 async def chat(message_text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
     await page.fill(selector["prompt_textarea"], message_text)
+    await page.locator(selector["chat_button"]).scroll_into_view_if_needed()
     await page.click(selector["chat_button"])
     await page.wait_for_selector(selector["voice_button"], timeout=timeout)
+    await page.locator(selector["copy_response_button"]).scroll_into_view_if_needed()
     await page.click(selector["copy_response_button"])
     return await page.evaluate("navigator.clipboard.readText()") or "NO RESPONSE FOUND"
 
 
 async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000) -> bytes:
     await chat(f"REPEAT TEXT: {text}", page, timeout=timeout)
+    await page.locator(selector["more_actions_button"]).scroll_into_view_if_needed()
     await page.click(selector["more_actions_button"])
     async with page.expect_response(lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=timeout) as resp_info:
+        await page.locator(selector["read_aloud_button"]).scroll_into_view_if_needed()
         await page.click(selector["read_aloud_button"])
     return await (await resp_info.value).body()
 
