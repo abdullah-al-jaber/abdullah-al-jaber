@@ -2,6 +2,7 @@ import sys
 import asyncio
 
 import rich.console
+import rich.prompt
 import rich.markdown
 import rich.traceback
 import playwright.async_api
@@ -81,14 +82,14 @@ async def main():
             await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
             if not await account_check(page):
                 console.print("Proceed to LOGIN !")
-                email = console.input("[ EMAIL ] > ")
-                password = console.input("[ PASSWORD ] > ")
+                email = rich.prompt.Prompt.ask("[ EMAIL ] > ")
+                password = rich.prompt.Prompt.ask("[ PASSWORD ] > ")
                 await login(email, password, page)
                 assert await account_check(page), "LOGIN FAILURE !"
             console.print("Welcome to ChatGPT CLI !")
             while True:
                 console.rule("[USER]", characters="=", style="green")
-                user_text = console.input("[PROMPT] > ")
+                user_text = rich.prompt.Prompt.ask("[PROMPT] > ")
                 if not user_text.startswith("/"): console.print("INVALID ! Must start with '/' !"); continue
                 match user_text.split(maxsplit=1):
                     case ["/chat", message]:
@@ -99,7 +100,7 @@ async def main():
                         chatgpt_audio = await tts(message, page)
                         console.rule("[CHATGPT]", characters="═",style="magenta")
                         console.print("Please enter FILE PATH for audio file (AAC) !")
-                        with open(console.input("[AUDIO_PATH] (audio.aac) > "), "wb") as audio_file:
+                        with open(rich.prompt.Prompt.ask("[AUDIO_PATH] (audio.aac) > "), "wb") as audio_file:
                             audio_file.write(chatgpt_audio)
                     case ["/exit"]:
                         console.print("AS YOU WISH !"); break
@@ -114,4 +115,5 @@ async def main():
 
 
 if __name__ == "__main__":
+    rich.prompt.Prompt.ask("pass: ", password=True)
     asyncio.run(main())
