@@ -112,8 +112,7 @@ async def main():
                     case ["/tts", message]:
                         chatgpt_audio = await tts(message, page)
                         console.rule("[CHATGPT]", characters="═", style="magenta")
-                        console.print("Please enter FILE PATH for audio file (AAC) !")
-                        with open(rich.prompt.Prompt.ask("[AUDIO_PATH] (audio.aac) > "), "wb") as audio_file:
+                        with open(rich.prompt.Prompt.ask("[AUDIO_PATH] > "), "wb") as audio_file:
                             audio_file.write(chatgpt_audio)
                     case ["/exit"]:
                         console.print("AS YOU WISH ! MY LIFE MAY PERISH !")
