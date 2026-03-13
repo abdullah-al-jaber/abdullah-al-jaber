@@ -85,9 +85,9 @@ async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000
 
 
 async def main():
-    async with playwright.async_api.async_playwright() as pm:
-        await playwright_stealth_plugin.async_apply(pm)
-        context = await pm.chromium.launch_persistent_context("chatgpt-data", headless=False, permissions=["clipboard-read", "clipboard-write"])
+    async with playwright.async_api.async_playwright() as pcm:
+        await playwright_stealth_plugin.async_apply(pcm)
+        context = await pcm.chromium.launch_persistent_context("chatgpt-data", headless=False, permissions=["clipboard-read", "clipboard-write"])
         page = await context.new_page()
         try:
             await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
@@ -118,7 +118,7 @@ async def main():
                         console.print("AS YOU WISH ! MY LIFE MAY PERISH !")
                         break
                     case _:
-                        console.print("INVALID ! Use /chat, /tts, /exit !")
+                        console.print("INVALID ! Use /chat TEXT, /tts TEXT, /exit !")
         except Exception as error:
             await page.screenshot(path="error_screenshot.png", full_page=True)
             console.print("ERROR_SCREENSHOT: [cyan]error_screenshot.png[/cyan] !")
