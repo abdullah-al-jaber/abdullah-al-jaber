@@ -60,7 +60,7 @@ def extract_zip(zip_file_name: str) -> str:
 
 
 def main():
-    zip_url = rich.prompt.Prompt.ask(" [ ZIP URL ] ")
+    zip_url = rich.prompt.Prompt.ask(" [ ZIP URL ] > ")
     zip_file_name = download_zip(zip_url)
     zip_folder_name = extract_zip(zip_file_name)
     panel = rich.panel.Panel(f"OUTPUT: [cyan]{zip_folder_name}[/cyan]", title="[ DONE ]", expand=False)
