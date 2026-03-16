@@ -13,6 +13,7 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
+exit
 chsh -s /usr/bin/fish retro-boy
 sudo -u retro-boy fish -c "set -U fish_greeting"
 sudo -u retro-boy fish -c "set -Ux LANG en_US.UTF-8"
