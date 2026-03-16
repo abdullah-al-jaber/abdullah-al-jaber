@@ -14,6 +14,8 @@ if [ -f ~/.bashrc ]; then
 fi
 EOF
 exit
+sudo -u retro-boy zsh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting'
+sudo -u retro-boy zsh -c 'git clone https://github.com/z-shell/zsh-eza.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza;'
 chsh -s /usr/bin/fish retro-boy
 sudo -u retro-boy fish -c "set -U fish_greeting"
 sudo -u retro-boy fish -c "set -Ux LANG en_US.UTF-8"
