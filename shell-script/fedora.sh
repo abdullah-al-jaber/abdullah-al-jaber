@@ -14,8 +14,10 @@ if [ -f ~/.bashrc ]; then
 fi
 EOF
 exit
+sudo -u retro-boy zsh -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
 sudo -u retro-boy zsh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting'
-sudo -u retro-boy zsh -c 'git clone https://github.com/z-shell/zsh-eza.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza;'
+sudo -u retro-boy zsh -c 'git clone https://github.com/z-shell/zsh-eza.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza'
+sudo -u retro-boy zsh -c 'git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete'
 chsh -s /usr/bin/fish retro-boy
 sudo -u retro-boy fish -c "set -U fish_greeting"
 sudo -u retro-boy fish -c "set -Ux LANG en_US.UTF-8"
