@@ -1,7 +1,7 @@
 # source <(curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/fedora.sh)
 dnf upgrade -y
 dnf copr enable alternateved/eza
-dnf install -y nodejs npm python pip zsh openssl nano neovim glibc-langpack-en ncurses wget eza
+dnf install -y nodejs npm python pip zsh openssl nano neovim glibc-langpack-en ncurses wget eza git
 useradd -m -p '$(openssl passwd -6 123)' retro-boy
 echo 'retro-boy ALL=(ALL) ALL' >> /etc/sudoers
 cat <<'EOF' >>~/.bashrc
