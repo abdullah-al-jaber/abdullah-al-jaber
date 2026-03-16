@@ -14,6 +14,7 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
+sudo -u retro-boy zsh 'yes n | bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"'
 sudo -u retro-boy zsh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.local/share/zsh-syntax-highlighting'
 chsh -s /usr/bin/zsh retro-boy
 cat <<'EOF' >> /home/retro-boy/.zshrc
