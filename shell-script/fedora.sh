@@ -14,12 +14,8 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
-sudo -u retro-boy zsh -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
-sudo -u retro-boy zsh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting'
-sudo -u retro-boy zsh -c 'git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete'
-sudo -u retro-boy zsh -c 'git clone https://github.com/z-shell/zsh-eza.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza'
+sudo -u retro-boy zsh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.local/share/zsh-syntax-highlighting'
 chsh -s /usr/bin/zsh retro-boy
-sudo -u retro-boy zsh -c 'sed -i "s/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autocomplete zsh-eza)/g" ~/.zshrc'
 cat <<'EOF' >> /home/retro-boy/.zshrc
 alias clear-history='yes | history -c'
 EOF
