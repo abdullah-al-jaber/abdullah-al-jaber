@@ -18,11 +18,11 @@ sed -i \
 	-e 's/^# terminal-margin-vertical=0$/terminal-margin-vertical=5/' \
 	.termux/termux.properties
 chsh -s fish
-fish -c "alias --save fedora='proot-distro login fedora --bind /storage/emulated/0/:/android --isolated'"
-fish -c "alias --save clear-history='yes yes | history clear'"
-fish -c "set -U fish_greeting"
+fish -c 'alias --save fedora="proot-distro login fedora --bind /storage/emulated/0/:/android --isolated"'
+fish -c 'alias --save clear-history="yes yes | history clear"'
+fish -c 'set -U fish_greeting'
 echo >> ~/.config/fish/config.fish
-echo "starship init fish | source" >> ~/.config/fish/config.fish
+echo 'starship init fish | source' >> ~/.config/fish/config.fish
 starship preset bracketed-segments -o ~/.config/starship.toml
 sed -i '9,11d' ~/.config/starship.toml
 sed -i '2i scan_timeout = 0' ~/.config/starship.toml

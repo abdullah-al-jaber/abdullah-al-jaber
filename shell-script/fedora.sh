@@ -3,29 +3,31 @@ dnf upgrade -y
 dnf install -y nodejs npm python pip zsh openssl nano neovim glibc-langpack-en ncurses wget
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
 echo "retro-boy ALL=(ALL) ALL" >>/etc/sudoers
-cat <<'EOF' >>~/.bashrc
+cat <<"EOF" >>~/.bashrc
 if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then
   exec su - retro-boy
 fi
 EOF
-cat <<'EOF' >>~/.bash_profile
+cat <<"EOF" >>~/.bash_profile
 if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
 exit
-sudo -u retro-boy zsh -c 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
-sudo -u retro-boy zsh -c 'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting'
-sudo -u retro-boy zsh -c 'git clone https://github.com/z-shell/zsh-eza.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza'
-sudo -u retro-boy zsh -c 'git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete'
-chsh -s /usr/bin/fish retro-boy
+sudo -u retro-boy zsh -c 'sh -c '$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)' '' --unattended'
+sudo -u retro-boy zsh -c "git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+sudo -u retro-boy zsh -c "git clone https://github.com/z-shell/zsh-eza.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-eza"
+sudo -u retro-boy zsh -c "git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autocomplete"
+chsh -s /usr/bin/zsh retro-boy
+sudo -u retro-boy zsh -c "sed -i "s/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-eza)/g" ~/.zshrc"
+sudo -u retro-boy zsh -c "sudo dnf copr enable alternateved/eza"
 sudo -u retro-boy fish -c "set -U fish_greeting"
 sudo -u retro-boy fish -c "set -Ux LANG en_US.UTF-8"
-sudo -u retro-boy fish -c "alias --save clear-history='yes yes | history clear'"
+sudo -u retro-boy fish -c "alias --save clear-history="yes yes | history clear""
 dnf copr enable atim/starship -y
 dnf install -y starship
-sudo -u retro-boy sh -c "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
+sudo -u retro-boy sh -c "echo "starship init fish | source" >> ~/.config/fish/config.fish"
 sudo -u retro-boy sh -c "starship preset bracketed-segments -o ~/.config/starship.toml"
-sudo -u retro-boy sh -c "sed -i '2i scan_timeout = 0' ~/.config/starship.toml"
+sudo -u retro-boy sh -c "sed -i "2i scan_timeout = 0" ~/.config/starship.toml"
 history -c && >~/.bash_history && history -w
 exit
