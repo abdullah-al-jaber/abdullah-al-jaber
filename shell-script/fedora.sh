@@ -20,8 +20,8 @@ sudo -u retro-boy zsh -c 'echo "ZSH_AUTOSUGGEST_STRATEGY=(history completion)" >
 sudo -u retro-boy zsh -c 'echo "zinit ice wait lucid" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "zinit light zdharma-continuum/fast-syntax-highlighting" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "zinit light zsh-users/zsh-autosuggestions" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "eval "$(starship init zsh)" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "alias clear-history=\"yes | history -c\"" >>~/.zshrc'
+sudo -u retro-boy zsh -c 'echo "eval \"$(starship init zsh)\"" >>~/.zshrc'
+sudo -u retro-boy zsh -c 'echo "alias clear-history=\"history -p\"" >>~/.zshrc'
 chsh -s /usr/bin/zsh retro-boy
 history -c && >~/.bash_history && history -w
 exit
