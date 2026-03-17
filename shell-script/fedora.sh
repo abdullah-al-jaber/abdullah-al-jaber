@@ -6,8 +6,9 @@ dnf install -y nodejs npm python pip zsh openssl nano neovim glibc-langpack-en n
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
 echo 'retro-boy ALL=(ALL) ALL' >>/etc/sudoers
 cat <<'EOF' >>~/.bashrc
-if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then
-  exec su - retro-boy
+if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ] && [[ $- == *i* ]]; then
+  su - retro-boy
+  exit
 fi
 EOF
 cat <<'EOF' >>~/.bash_profile
@@ -15,6 +16,9 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
+sudo -u retro-boy zsh -c 'export HISTFILE=~/.zsh_history'
+sudo -u retro-boy zsh -c 'export HISTSIZE=10000'
+sudo -u retro-boy zsh -c 'export SAVEHIST=10000'
 sudo -u retro-boy zsh -c 'yes n | bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"'
 sudo -u retro-boy zsh -c 'echo "ZSH_AUTOSUGGEST_STRATEGY=(history completion)" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "zinit ice lucid wait" >>~/.zshrc'
