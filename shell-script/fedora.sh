@@ -22,6 +22,7 @@ sudo -u retro-boy zsh -c 'echo "zinit light zdharma-continuum/fast-syntax-highli
 sudo -u retro-boy zsh -c 'echo "zinit light zsh-users/zsh-autosuggestions" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "eval \"$(starship init zsh)\"" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "alias clear-history=\"history -p\"" >>~/.zshrc'
+sudo -u retro-boy zsh -c 'starship preset bracketed-segments -o ~/.config/starship.toml'
 chsh -s /usr/bin/zsh retro-boy
 history -c && >~/.bash_history && history -w
 exit
