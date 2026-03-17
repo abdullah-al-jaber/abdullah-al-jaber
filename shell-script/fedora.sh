@@ -16,10 +16,10 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
-sudo -u retro-boy zsh -c 'export HISTFILE=~/.zsh_history'
-sudo -u retro-boy zsh -c 'export HISTSIZE=10000'
-sudo -u retro-boy zsh -c 'export SAVEHIST=10000'
-sudo -u retro-boy zsh -c 'yes n | bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"'
+sudo -u retro-boy zsh -c 'echo "export HISTFILE=~/.zsh_history" >>~/.zshrc'
+sudo -u retro-boy zsh -c 'echo "export HISTSIZE=10000" >>~/.zshrc'
+sudo -u retro-boy zsh -c 'echo "export SAVEHIST=10000" >>~/.zshrc'
+sudo -u retro-boy zsh -c 'yes | bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"'
 sudo -u retro-boy zsh -c 'echo "zinit ice lucid wait" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "zinit light marlonrichert/zsh-autocomplete" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "zinit ice lucid wait" >>~/.zshrc'
