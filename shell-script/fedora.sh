@@ -18,9 +18,7 @@ sudo -u retro-boy zsh -c 'yes y | curl -sS https://starship.rs/install.sh | sh'
 sudo -u retro-boy zsh -c 'yes n | bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"'
 sudo -u retro-boy zsh -c 'echo "zinit light zdharma-continuum/fast-syntax-highlighting" >> ~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "eval "$(starship init zsh)" >> ~/.zshrc'
+sudo -u retro-boy zsh -c 'echo "alias clear-history=\"yes | history -c\"" >> ~/.zshrc'
 chsh -s /usr/bin/zsh retro-boy
-cat <<'EOF' >> /home/retro-boy/.zshrc
-alias clear-history='yes | history -c'
-EOF
 history -c && >~/.bash_history && history -w
 exit
