@@ -29,6 +29,6 @@ sudo -u retro-boy zsh -c 'echo "zinit light z-shell/zsh-eza" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "eval \"\$(starship init zsh)\"" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'echo "alias clear-history=\"history -p\"" >>~/.zshrc'
 sudo -u retro-boy zsh -c 'starship preset bracketed-segments -o ~/.config/starship.toml'
-chsh -s /usr/bin/zsh retro-boy
+sudo -u retro-boy bash -c 'echo "exec zsh" >>~/.bashrc'
 history -c && >~/.bash_history && history -w
 exit
