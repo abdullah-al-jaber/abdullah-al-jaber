@@ -26,8 +26,8 @@ proot-distro install fedora
 proot-distro clear-cache
 
 # TERMUX
-curl -L https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o .termux/colors.properties
-curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o .termux/font.ttf
+curl -L https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o ~/.termux/colors.properties
+curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o ~/.termux/font.ttf
 echo_lines \
 	'# CUSTOM CONFIG #' \
 	'disable-terminal-session-change-toast = true' \
