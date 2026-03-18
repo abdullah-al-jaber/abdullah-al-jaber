@@ -29,14 +29,14 @@ proot-distro clear-cache
 curl -L https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o .termux/colors.properties
 curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o .termux/font.ttf
 echo_lines \
-	"# CUSTOM CONFIG #" \
-	"disable-terminal-session-change-toast = true" \
-	"terminal-transcript-rows = 5000" \
-	"volume-keys = volume" \
-	"use-black-ui = true" \
-	"bell-character = ignore" \
-	"terminal-margin-horizontal=5" \
-	"terminal-margin-vertical=5" \
+	'# CUSTOM CONFIG #' \
+	'disable-terminal-session-change-toast = true' \
+	'terminal-transcript-rows = 5000' \
+	'volume-keys = volume' \
+	'use-black-ui = true' \
+	'bell-character = ignore' \
+	'terminal-margin-horizontal=5' \
+	'terminal-margin-vertical=5' \
 	>>~/.termux/termux.properties
 
 # SHELL
