@@ -1,14 +1,11 @@
 # source <(curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/fedora.sh)
 dnf upgrade -y
-dnf copr -y enable alternateved/eza
-dnf copr -y enable atim/starship
-dnf install -y nodejs npm python pip zsh openssl nano neovim glibc-langpack-en ncurses wget eza git starship
+dnf install -y nodejs npm python pip fish openssl nano neovim glibc-langpack-en ncurses wget
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
-echo 'retro-boy ALL=(ALL) ALL' >>/etc/sudoers
+echo "retro-boy ALL=(ALL) ALL" >>/etc/sudoers
 cat <<'EOF' >>~/.bashrc
-if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ] && [[ $- == *i* ]]; then
-  su - retro-boy
-  exit
+if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then
+  exec su - retro-boy
 fi
 EOF
 cat <<'EOF' >>~/.bash_profile
@@ -16,19 +13,14 @@ if [ -f ~/.bashrc ]; then
   source ~/.bashrc
 fi
 EOF
-sudo -u retro-boy zsh -c 'echo "export HISTFILE=~/.zsh_history" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "export HISTSIZE=10000" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "export SAVEHIST=10000" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'yes | bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"'
-sudo -u retro-boy zsh -c 'echo "zinit ice lucid wait" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "zinit light marlonrichert/zsh-autocomplete" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "zinit ice lucid wait" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "zinit light zsh-users/zsh-syntax-highlighting" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "zinit ice lucid wait" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "zinit light z-shell/zsh-eza" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "eval \"\$(starship init zsh)\"" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'echo "alias clear-history=\"history -p\"" >>~/.zshrc'
-sudo -u retro-boy zsh -c 'starship preset bracketed-segments -o ~/.config/starship.toml'
-sudo -u retro-boy bash -c 'echo "exec zsh" >>~/.bashrc'
+chsh -s /usr/bin/fish retro-boy
+sudo -u retro-boy fish -c "set -U fish_greeting"
+sudo -u retro-boy fish -c "set -Ux LANG en_US.UTF-8"
+sudo -u retro-boy fish -c "alias --save clear-history='yes yes | history clear'"
+dnf copr enable atim/starship -y
+dnf install -y starship
+sudo -u retro-boy sh -c "echo 'starship init fish | source' >> ~/.config/fish/config.fish"
+sudo -u retro-boy sh -c "starship preset bracketed-segments -o ~/.config/starship.toml"
+sudo -u retro-boy sh -c "sed -i '2i scan_timeout = 0' ~/.config/starship.toml"
 history -c && >~/.bash_history && history -w
 exit
