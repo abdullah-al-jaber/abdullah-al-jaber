@@ -1,45 +1,47 @@
-# source <(curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/shell-script/fedora.sh)
+# ==============================
+# Variables
+# ==============================
+CUSTOM_TAG="LEGEND NEVER DIES"
 
-# FUNCTIONS
+# ==============================
+# Functions
+# ==============================
 echo_lines() {
-	local text=""
-	local flag=1
+	echo
 	for line in "$@"; do
-		if [ "$flag" -eq 1 ]; then
-			text="$line"
-			flag=0
-		else
-			text+="\n$line"
-		fi
+		echo "$line"
 	done
-	echo -e "\n$text\n"
+	echo
 }
 
-# PACKAGE
+write_lines() {
+	local file="$1" && shift
+	local lines=("$@")
+
+	if ! grep -qF "$CUSTOM_TAG" "$file" 2>/dev/null; then
+		echo_lines "# $CUSTOM_TAG #" "${lines[@]}" >>"$file"
+	fi
+}
+
+# ==============================
+# Main Execution
+# ==============================
 yes | dnf copr enable atim/starship
 yes | dnf upgrade
 yes | dnf install nodejs npm python pip nano neovim fish starship openssl glibc-langpack-en ncurses
 
-# USER
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
-echo_lines \
-	'# CUSTOM CONFIG #' \
-	'retro-boy   ALL=(ALL)   ALL' \
-	>>/etc/sudoers
-echo_lines \
-	'# CUSTOM CONFIG #' \
+write_lines /etc/sudoers \
+	'retro-boy   ALL=(ALL)   ALL'
+write_lines ~/.bashrc \
 	'if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then' \
 	'  exec su - retro-boy' \
-	'fi' \
-	>>~/.bashrc
-echo_lines \
-	'# CUSTOM CONFIG #' \
+	'fi'
+write_lines ~/.bash_profile \
 	'if [ -f ~/.bashrc ]; then' \
 	'  source ~/.bashrc' \
-	'fi' \
-	>>~/.bash_profile
+	'fi'
 
-# SHELL
 chsh -s /usr/bin/fish retro-boy
 echo_lines \
 	'set -U fish_greeting' \
@@ -49,5 +51,6 @@ echo_lines \
 	'starship preset bracketed-segments -o ~/.config/starship.toml' \
 	'sed -i "2i scan_timeout = 0" ~/.config/starship.toml' |
 	sudo -u retro-boy fish
-history -c && >~/.bash_history && history -w
+
+history -c && history -w
 exit
