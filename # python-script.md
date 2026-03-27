@@ -4,6 +4,12 @@ ChatGPT Script :-
 curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/chatgpt.py -o chatgpt.py && pip install rich playwright playwright-stealth-plugin && playwright install
 ```
 
+Ebook Maker Script :-
+
+```bash
+curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/ebook-maker.py -o ebook-maker.py && pip install httpx rich
+```
+
 Extract Me Script :-
 
 ```bash
