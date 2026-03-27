@@ -62,10 +62,14 @@ async def main() -> None:
     for file_name in file_names:
         lines = read_file(os.path.join(FOLDER_PATH, file_name), "r").splitlines()
         chapter = ebooklib.epub.EpubHtml(title=lines[0], file_name=file_name.replace(".txt", ".xhtml"))
-        soup = bs4.BeautifulSoup()
-        soup.new_tag("h3").text = lines[0]
+        soup = bs4.BeautifulSoup("", "html.parser")
+        h3 = soup.new_tag("h3")
+        h3.string = lines[0]
+        soup.append(h3)
         for line in lines[1:]:
-            soup.new_tag("p").text = line
+            p = soup.new_tag("p")
+            p.string = line
+            soup.append(p)
         chapter.content = soup.prettify()
         epub_book.add_item(chapter)
         chapters.append(chapter)
