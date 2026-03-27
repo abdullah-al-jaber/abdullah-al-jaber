@@ -34,7 +34,8 @@ selector = {
 
 
 async def account_check(page: playwright.async_api.Page) -> bool:
-    if page.url != url["homepage"]: await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
+    if page.url != url["homepage"]:
+        await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
     return any(cookie.get("name") == "oai-gn" and cookie.get("value") == "Jaber" for cookie in await page.context.cookies())
 
 
@@ -59,7 +60,8 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
     await page.locator(selector["submit_button"]).scroll_into_view_if_needed()
     await element_click(selector["submit_button"], page)
     await page.wait_for_url(url["push_auth"], wait_until="load")
-    async with page.expect_navigation(timeout=180000): console.print("Authorize on Your Phone ! Quick !")
+    async with page.expect_navigation(timeout=180000):
+        console.print("Authorize on Your Phone ! Quick !")
 
 
 async def chat(message_text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
