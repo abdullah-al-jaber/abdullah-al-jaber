@@ -7,11 +7,11 @@ curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/
 Ebook Maker Script :-
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/ebook-maker.py -o ebook-maker.py && pip install httpx rich
+curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/ebook-maker.py -o ebook-maker.py && pip install bs4 ebooklib
 ```
 
 Extract Me Script :-
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/extract-me.py -o extract-me.py && pip install ebooklib rich
+curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/extract-me.py -o extract-me.py && pip install httpx rich
 ```
