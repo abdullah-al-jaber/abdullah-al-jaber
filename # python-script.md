@@ -13,5 +13,5 @@ curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/
 Extract Me Script :-
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/extract-me.py -o extract-me.py && pip install httpx rich
+curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/extract-me.py -o extract-me.py && pip install ebooklib rich
 ```
