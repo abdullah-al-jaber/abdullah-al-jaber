@@ -27,8 +27,8 @@ selector = {
     "prompt_textarea": "div#prompt-textarea > p",
     "chat_button": "button[aria-label='Send prompt']",
     "voice_button": "button[aria-label='Start Voice']",
-    "copy_response_button": "article:last-of-type button[aria-label='Copy response']",
-    "more_actions_button": "article:last-of-type button[aria-label='More actions']",
+    "copy_response_button": "section[data-turn='assistant']:last-of-type button[aria-label='Copy response']",
+    "more_actions_button": "section[data-turn='assistant']:last-of-type button[aria-label='More actions']",
     "read_aloud_button": "[data-radix-popper-content-wrapper] div[role='menuitem'][aria-label='Read aloud']",
 }
 
