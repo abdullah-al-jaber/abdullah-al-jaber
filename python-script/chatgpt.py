@@ -38,17 +38,17 @@ async def account_check(page: playwright.async_api.Page) -> bool:
     return any(cookie.get("name") == "oai-gn" and cookie.get("value") == "Jaber" for cookie in await page.context.cookies())
 
 
-async def element_click(selector: str, page: playwright.async_api.Page):
+async def element_click(selector: str, page: playwright.async_api.Page, delay: float = 1.25):
     element = page.locator(selector)
     await element.wait_for(state="visible")
     await element.scroll_into_view_if_needed()
     bounding_box = await element.bounding_box()
     assert bounding_box, "Bounding Box isn't found !"
     await page.mouse.click(bounding_box["x"] + bounding_box["width"] / 2, bounding_box["y"] + bounding_box["height"] / 2)
-    await asyncio.sleep(1.25)
+    await asyncio.sleep(delay)
 
 
-async def login(email: str, password: str, page: playwright.async_api.Page):
+async def login(email: str, password: str, page: playwright.async_api.Page, authorize_timeout: float = 300_000):
     await page.goto(url["login"], wait_until="load")
     await page.wait_for_url(url["email_login"], wait_until="load")
     await page.fill(selector["email_input_field"], email)
@@ -57,22 +57,24 @@ async def login(email: str, password: str, page: playwright.async_api.Page):
     await page.fill(selector["password_input_field"], password)
     await element_click(selector["submit_button"], page)
     await page.wait_for_url(url["push_auth"], wait_until="load")
-    async with page.expect_navigation(timeout=180000):
+    async with page.expect_navigation(timeout=authorize_timeout):
         console.print("Authorize on Your Phone ! Quick !")
 
 
-async def chat(message_text: str, page: playwright.async_api.Page, timeout: float = 60000) -> str:
+async def chat(message_text: str, page: playwright.async_api.Page, response_timeout: float = 150_000) -> str:
     await page.fill(selector["prompt_textarea"], message_text)
     await element_click(selector["chat_button"], page)
-    await page.wait_for_selector(selector["voice_button"], timeout=timeout)
+    await page.wait_for_selector(selector["voice_button"], timeout=response_timeout)
     await element_click(selector["copy_response_button"], page)
     return await page.evaluate("navigator.clipboard.readText()") or "NO RESPONSE FOUND"
 
 
-async def tts(text: str, page: playwright.async_api.Page, timeout: float = 80000) -> bytes:
-    await chat(f"REPEAT TEXT: {text}", page, timeout=timeout)
+async def tts(text: str, page: playwright.async_api.Page, response_timeout: float = 150_000, read_aloud_timeout: float = 300_000) -> bytes:
+    await chat(f"REPEAT TEXT: {text}", page, response_timeout=response_timeout)
     await element_click(selector["more_actions_button"], page)
-    async with page.expect_response(lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=timeout) as resp_info:
+    async with page.expect_response(
+        lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=read_aloud_timeout
+    ) as resp_info:
         await element_click(selector["read_aloud_button"], page)
     return await (await resp_info.value).body()
 
@@ -83,14 +85,15 @@ async def main():
         context = await pcm.chromium.launch_persistent_context("chatgpt-data", headless=False, permissions=["clipboard-read", "clipboard-write"])
         page = await context.new_page()
         try:
-            await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
-            if not await account_check(page):
+            for _ in range(2):
+                await page.goto(url["homepage"], wait_until="networkidle", timeout=60_000)
+                if await account_check(page): break
                 console.print("Proceed to LOGIN !")
                 email = rich.prompt.Prompt.ask("[ EMAIL ] > ", console=console)
                 password = rich.prompt.Prompt.ask("[ PASSWORD ] > ", console=console)
                 await login(email, password, page)
-                await page.goto(url["homepage"], wait_until="networkidle", timeout=60000)
-                assert await account_check(page), "LOGIN FAILURE !"
+            else:
+                raise Exception("LOGIN FAILURE !")
             console.print("Welcome to ChatGPT CLI !")
             while True:
                 console.rule("[USER]", characters="=", style="green")
