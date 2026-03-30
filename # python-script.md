@@ -1,7 +1,7 @@
 ChatGPT Script :-
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/chatgpt.py -o chatgpt.py && pip install rich playwright playwright-stealth-plugin && playwright install
+curl -sSL https://raw.githubusercontent.com/abdullah-al-jaber/abdullah-al-jaber/vanilla/python-script/chatgpt.py -o chatgpt.py && pip install rich playwright playwright-stealth-plugin && playwright install chrome
 ```
 
 Ebook Maker Script :-
