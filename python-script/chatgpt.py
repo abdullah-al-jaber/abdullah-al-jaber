@@ -61,8 +61,8 @@ async def login(email: str, password: str, page: playwright.async_api.Page, auth
         console.print("Authorize on Your Phone ! Quick !")
 
 
-async def chat(message_text: str, page: playwright.async_api.Page, response_timeout: float = 150_000) -> str:
-    await page.fill(selector["prompt_textarea"], message_text)
+async def chat(text: str, page: playwright.async_api.Page, response_timeout: float = 150_000) -> str:
+    await page.fill(selector["prompt_textarea"], text)
     await element_click(selector["chat_button"], page)
     await page.wait_for_selector(selector["voice_button"], timeout=response_timeout)
     await element_click(selector["copy_response_button"], page)
@@ -70,7 +70,7 @@ async def chat(message_text: str, page: playwright.async_api.Page, response_time
 
 
 async def tts(text: str, page: playwright.async_api.Page, response_timeout: float = 150_000, read_aloud_timeout: float = 300_000) -> bytes:
-    await chat(f"REPEAT TEXT: {text}", page, response_timeout=response_timeout)
+    assert text == await chat(f"REPEAT TEXT: '{text}'", page, response_timeout=response_timeout), "Text Mismatch !"
     await element_click(selector["more_actions_button"], page)
     async with page.expect_response(
         lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=read_aloud_timeout
@@ -82,7 +82,7 @@ async def tts(text: str, page: playwright.async_api.Page, response_timeout: floa
 async def main():
     async with playwright.async_api.async_playwright() as pcm:
         await playwright_stealth_plugin.async_apply(pcm)
-        context = await pcm.chromium.launch_persistent_context("chatgpt-data", headless=False, permissions=["clipboard-read", "clipboard-write"])
+        context = await pcm.chromium.launch_persistent_context("chatgpt-data", headless=True, permissions=["clipboard-read", "clipboard-write"])
         page = await context.new_page()
         try:
             for _ in range(2):
