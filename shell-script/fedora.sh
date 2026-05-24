@@ -28,7 +28,7 @@ write_lines() {
 # ==============================
 yes | dnf copr enable atim/starship
 yes | dnf upgrade
-yes | dnf install nodejs npm python pip nano neovim fish starship openssl glibc-langpack-en ncurses
+yes | dnf install nodejs npm python pip nano neovim fish starship openssl glibc-langpack-en ncurses util-linux
 
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
 write_lines /etc/sudoers \
