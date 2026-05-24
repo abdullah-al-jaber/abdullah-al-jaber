@@ -30,6 +30,11 @@ dnf copr enable atim/starship -y
 dnf upgrade -y
 dnf install nodejs npm python pip nano neovim fish starship openssl glibc-langpack-en ncurses util-linux -y
 
+chown root:root /etc/sudo.conf
+chmod 644 /etc/sudo.conf
+chown root:root /usr/bin/sudo
+chmod 4755 /usr/bin/sudo
+
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
 write_lines /etc/sudoers \
 	'retro-boy   ALL=(ALL)   ALL'
