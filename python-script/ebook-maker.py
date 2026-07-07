@@ -1,5 +1,6 @@
 import re
 import os
+import random
 import typing
 import asyncio
 
@@ -7,17 +8,22 @@ import bs4
 import ebooklib.epub
 
 ## CONFIG ##
-TITLE = "NO TITLE"
-AUTHOR = "NO AUTHOR"
+TITLE = "Nobody Knows Title !?"
+AUTHOR = "Forgetful Author"
 DESCRIPTION = """
-NO DESCRIPTION
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ Sed non risus.
+ Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.
+ Cras elementum ultrices diam.
+ Maecenas ligula massa, varius a, semper congue, euismod non, mi.
 """
-LANGUAGE = "en"
-COVER_IMAGE_PATH = "NONE"
+COVER_IMAGE_PATH = os.path.join(".BookCover", random.choice(os.listdir(".BookCover")))
 
+FOLDER_PATH = "FN"
 FILE_PATH = "EBOOK.epub"
-FOLDER_PATH = "TEXT"
 
+### MOD HERE
+# COVER_IMAGE_PATH = "cover.jpg"
 
 @typing.overload
 def read_file(file_path: str, mode: typing.Literal["r"]) -> str: ...
@@ -26,7 +32,7 @@ def read_file(file_path: str, mode: typing.Literal["rb"]) -> bytes: ...
 
 
 @typing.overload
-def write_file(file_path: str, content: str, mode: typing.Literal["w"]) -> None: ...
+def write_file(file_path: str, content: str, mode: typing.Literal["word"]) -> None: ...
 @typing.overload
 def write_file(file_path: str, content: str, mode: typing.Literal["a"]) -> None: ...
 @typing.overload
@@ -54,12 +60,11 @@ async def main() -> None:
     epub_book = ebooklib.epub.EpubBook()
     epub_book.set_title(TITLE)
     epub_book.add_author(AUTHOR)
-    epub_book.set_language(LANGUAGE)
     epub_book.set_unique_metadata("DC", "description", DESCRIPTION)
-    epub_book.set_cover("cover.jpg", read_file(COVER_IMAGE_PATH, "rb")) if COVER_IMAGE_PATH != "NONE" else None
+    epub_book.set_cover(COVER_IMAGE_PATH, read_file(COVER_IMAGE_PATH, "rb"))
     file_names = sorted(os.listdir(FOLDER_PATH), key=number)
     chapters = []
-    for file_name in file_names:
+    for idx, file_name in enumerate(file_names):
         lines = read_file(os.path.join(FOLDER_PATH, file_name), "r").splitlines()
         chapter = ebooklib.epub.EpubHtml(title=lines[0], file_name=file_name.replace(".txt", ".xhtml"))
         soup = bs4.BeautifulSoup("", "html.parser")
@@ -70,13 +75,11 @@ async def main() -> None:
             p = soup.new_tag("p")
             p.string = line
             soup.append(p)
-        chapter.content = soup.prettify()
+        chapter.content = "<br/>" * 3 + str(soup) + "<p> ㅤ </p>"
         epub_book.add_item(chapter)
         chapters.append(chapter)
     epub_book.toc = chapters
     epub_book.spine = ["nav"] + chapters
-    epub_book.add_item(ebooklib.epub.EpubNcx())
-    epub_book.add_item(ebooklib.epub.EpubNav())
     ebooklib.epub.write_epub(FILE_PATH, epub_book)
 
 
