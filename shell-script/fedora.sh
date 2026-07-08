@@ -28,7 +28,7 @@ write_lines() {
 # Main Execution
 # ==============================
 dnf upgrade -y
-dnf install nano neovim fish openssl glibc-langpack-en ncurses util-linux -y
+dnf install nano neovim fish openssl -y
 
 chown root:root /etc/sudo.conf
 chmod 644 /etc/sudo.conf
