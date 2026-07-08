@@ -7,11 +7,9 @@ CUSTOM_TAG="LEGEND NEVER DIES"
 # Functions
 # ==============================
 echo_lines() {
-	echo
 	for line in "$@"; do
-		echo "$line"
+		echo -e "$line"
 	done
-	echo
 }
 
 write_lines() {
@@ -19,7 +17,7 @@ write_lines() {
 	local lines=("$@")
 
 	if ! grep -qF "$CUSTOM_TAG" "$file" 2>/dev/null; then
-		echo_lines "# $CUSTOM_TAG #" "${lines[@]}" >>"$file"
+		echo_lines "\n" "# $CUSTOM_TAG #" "${lines[@]}" >>"$file"
 	fi
 }
 
@@ -28,13 +26,13 @@ write_lines() {
 # ==============================
 termux-change-repo
 yes | pkg upgrade
-yes | pkg install proot-distro fish starship
+yes | pkg install sudo proot-distro fish
 
 curl -L https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o ~/.termux/colors.properties
 curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o ~/.termux/font.ttf
 write_lines ~/.termux/termux.properties \
 	'disable-terminal-session-change-toast = true' \
-	'terminal-transcript-rows = 5000' \
+	'terminal-transcript-rows = 8000' \
 	'volume-keys = volume' \
 	'use-black-ui = true' \
 	'bell-character = ignore' \
@@ -47,20 +45,11 @@ proot-distro clear-cache
 
 chsh -s fish
 echo_lines \
-	'alias --save fedora="proot-distro login fedora --bind /storage/emulated/0/:/android --isolated"' \
+	'alias --save fedora="proot-distro login fedora --bind /storage/emulated/0/:/android --user retro-boy --isolated"' \
 	'alias --save clear-history="yes yes | history clear"' \
+	'yes | fish_config prompt save arrow' \
 	'set -U fish_greeting' |
 	fish
-write_lines ~/.config/fish/config.fish \
-	'starship init fish | source'
-starship preset bracketed-segments -o ~/.config/starship.toml
-sed -i '9,11d' ~/.config/starship.toml
-sed -i '2i scan_timeout = 0' ~/.config/starship.toml
-write_lines ~/.config/starship.toml \
-	'[character]' \
-	'disabled = false' \
-	'error_symbol = "[❯](red)"' \
-	'success_symbol = "[❯](blue)"'
 
 history -c && history -w
 exit

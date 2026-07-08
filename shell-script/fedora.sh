@@ -7,11 +7,9 @@ CUSTOM_TAG="LEGEND NEVER DIES"
 # Functions
 # ==============================
 echo_lines() {
-	echo
 	for line in "$@"; do
-		echo "$line"
+		echo -e "$line"
 	done
-	echo
 }
 
 write_lines() {
@@ -19,16 +17,15 @@ write_lines() {
 	local lines=("$@")
 
 	if ! grep -qF "$CUSTOM_TAG" "$file" 2>/dev/null; then
-		echo_lines "# $CUSTOM_TAG #" "${lines[@]}" >>"$file"
+		echo_lines "\n" "# $CUSTOM_TAG #" "${lines[@]}" >>"$file"
 	fi
 }
 
 # ==============================
 # Main Execution
 # ==============================
-dnf copr enable atim/starship -y
 dnf upgrade -y
-dnf install nodejs npm python pip nano neovim fish starship openssl glibc-langpack-en ncurses util-linux -y
+dnf install nano neovim fish openssl glibc-langpack-en ncurses util-linux -y
 
 chown root:root /etc/sudo.conf
 chmod 644 /etc/sudo.conf
@@ -38,23 +35,13 @@ chmod 4755 /usr/bin/sudo
 useradd -m -p "$(openssl passwd -6 123)" retro-boy
 write_lines /etc/sudoers \
 	'retro-boy   ALL=(ALL)   ALL'
-write_lines ~/.bashrc \
-	'if [ "$(id -u)" -eq 0 ] && [ "$SUDO_USER" = "" ]; then' \
-	'  exec su - retro-boy' \
-	'fi'
-write_lines ~/.bash_profile \
-	'if [ -f ~/.bashrc ]; then' \
-	'  source ~/.bashrc' \
-	'fi'
 
 chsh -s /usr/bin/fish retro-boy
 echo_lines \
-	'set -U fish_greeting' \
-	'set -Ux LANG en_US.UTF-8' \
 	'alias --save clear-history="yes yes | history clear"' \
-	'echo "starship init fish | source" >> ~/.config/fish/config.fish' \
-	'starship preset bracketed-segments -o ~/.config/starship.toml' \
-	'sed -i "2i scan_timeout = 0" ~/.config/starship.toml' |
+	'yes | fish_config prompt save scales' \
+	'set -Ux LANG en_US.UTF-8'\
+	'set -U fish_greeting'  |
 	sudo -u retro-boy fish
 
 history -c && history -w
