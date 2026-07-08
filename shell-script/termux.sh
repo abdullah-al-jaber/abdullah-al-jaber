@@ -1,3 +1,6 @@
+set -eE
+trap 'echo -e "ERROR —⟩ $BASH_COMMAND [$LINENO]"; read -p "[PRESS ENTER TO EXIT]"' ERR
+
 # ==============================
 # Variables
 # ==============================
@@ -26,10 +29,10 @@ write_lines() {
 # ==============================
 termux-change-repo
 yes | pkg upgrade
-yes | pkg install sudo proot-distro fish
+yes | pkg install sudo fish proot-distro 
 
-curl -L https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o ~/.termux/colors.properties
-curl -L https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o ~/.termux/font.ttf
+curl -sSL https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o ~/.termux/colors.properties
+curl -sSL https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o ~/.termux/font.ttf
 write_lines ~/.termux/termux.properties \
 	'disable-terminal-session-change-toast = true' \
 	'terminal-transcript-rows = 8000' \

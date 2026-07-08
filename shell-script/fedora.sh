@@ -1,3 +1,6 @@
+set -eE
+trap 'echo -e "ERROR —⟩ $BASH_COMMAND [$LINENO]"; read -p "[PRESS ENTER TO EXIT]"' ERR
+
 # ==============================
 # Variables
 # ==============================
