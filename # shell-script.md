@@ -13,5 +13,5 @@ source <(curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/shell-s
 GitHub Setup Script :-
 
 ```bash
-curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/shell-script/github.sh | sh
+curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/shell-script/github.sh | bash
 ```
