@@ -11,19 +11,18 @@ import ebooklib.epub
 TITLE = "Nobody Knows Title !?"
 AUTHOR = "Forgetful Author"
 DESCRIPTION = """
- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- Sed non risus.
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
  Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.
- Cras elementum ultrices diam.
- Maecenas ligula massa, varius a, semper congue, euismod non, mi.
+ Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.
 """
 COVER_IMAGE_PATH = os.path.join(".BookCover", random.choice(os.listdir(".BookCover")))
 
-FOLDER_PATH = "FN"
+FOLDER_PATH = "NOVEL_TEXT_FILES"
 FILE_PATH = "EBOOK.epub"
 
 ### MOD HERE
 # COVER_IMAGE_PATH = "cover.jpg"
+# FOLDER_PATH = "FN"
 
 @typing.overload
 def read_file(file_path: str, mode: typing.Literal["r"]) -> str: ...

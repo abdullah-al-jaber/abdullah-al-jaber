@@ -98,9 +98,6 @@ async def main():
             while True:
                 console.rule("[USER]", characters="=", style="green")
                 user_text = rich.prompt.Prompt.ask("[PROMPT] > ")
-                if not user_text.startswith("/"):
-                    console.print("INVALID ! Must start with '/' !")
-                    continue
                 match user_text.split(maxsplit=1):
                     case ["/chat", message]:
                         chatgpt_text = await chat(message, page)
