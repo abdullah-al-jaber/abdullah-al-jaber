@@ -49,8 +49,9 @@ proot-distro clear-cache
 chsh -s fish
 echo_lines \
 	'alias --save fedora="proot-distro login fedora --bind /storage/emulated/0/:/android --user retro-boy --isolated"' \
-	'alias --save clear-history="yes yes | history clear"' \
-	'yes | fish_config prompt save arrow' \
+	'alias --save fdr-rt="proot-distro login fedora --bind /storage/emulated/0/:/android --user root --isolated"' \
+	'alias --save clear-history="echo yes | history clear"' \
+	'echo y | fish_config prompt save arrow' \
 	'set -U fish_greeting' |
 	fish
 
