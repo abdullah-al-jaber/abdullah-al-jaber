@@ -43,7 +43,7 @@ write_lines ~/.termux/termux.properties \
 	'terminal-margin-vertical=5'
 mv ~/../usr/etc/motd ~/../usr/etc/motd.bk 2>/dev/null
 
-proot-distro install fedora
+proot-distro install --name fedora registry.fedoraproject.org/fedora-toolbox:latest
 proot-distro clear-cache
 
 chsh -s fish
