@@ -9,6 +9,7 @@ for cmd in gh git; do
 done
 
 echo y | gh auth login --git-protocol https --scopes repo,codespace --web && gh auth setup-git
-git config --global --add safe.directory '/mnt/sdcard/PlayGround/*'
+git config --global --add safe.directory '/sdcard/PlayGround/*'
+git config --global --add safe.directory '/android/PlayGround/*'
 git config --global user.email 'abdullah.0.al.0.jaber@gmail.com'
 git config --global user.name 'Abdullah Al Jaber'
