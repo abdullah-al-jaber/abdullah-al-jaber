@@ -1,4 +1,4 @@
-set -eE
+/set -eE
 trap 'echo -e "ERROR —⟩ $BASH_COMMAND [$LINENO]"; read -p "[PRESS ENTER TO EXIT]"' ERR
 
 # ==============================
@@ -40,7 +40,7 @@ write_lines /etc/sudoers \
 chsh -s /usr/bin/fish retro-boy
 echo_lines \
 	'alias --save clear-history="echo yes | history clear"' \
-	'alias lz="eza --icons --sort=type"' \
+	'alias lz="eza --icons --sort=type --all"' \
 	'echo y | fish_config prompt save scales' \
 	'set -Ux LANG en_US.UTF-8'\
 	'set -U fish_greeting'  |
