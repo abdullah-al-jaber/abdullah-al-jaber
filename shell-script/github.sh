@@ -3,7 +3,7 @@ trap 'echo -e "ERROR —⟩ $BASH_COMMAND [$LINENO]"; read -p "[PRESS ENTER TO E
 
 for cmd in gh git; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
-        echo "MISSING COMMAND: $cmd"
+        echo "DEPENDENCY FAILURE —⟩ gh git"
         exit 1
     fi
 done
