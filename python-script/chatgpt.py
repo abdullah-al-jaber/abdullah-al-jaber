@@ -87,7 +87,8 @@ async def main():
         try:
             for _ in range(2):
                 await page.goto(url["homepage"], wait_until="networkidle", timeout=60_000)
-                if await account_check(page): break
+                if await account_check(page):
+                    break
                 console.print("Proceed to LOGIN !")
                 email = rich.prompt.Prompt.ask("[ EMAIL ] > ", console=console)
                 password = rich.prompt.Prompt.ask("[ PASSWORD ] > ", console=console)

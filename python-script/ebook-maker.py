@@ -24,6 +24,7 @@ FILE_PATH = "EBOOK.epub"
 # COVER_IMAGE_PATH = "cover.jpg"
 # FOLDER_PATH = "FN"
 
+
 @typing.overload
 def read_file(file_path: str, mode: typing.Literal["r"]) -> str: ...
 @typing.overload
@@ -84,5 +85,3 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-# Final Version [line-length : 150]
