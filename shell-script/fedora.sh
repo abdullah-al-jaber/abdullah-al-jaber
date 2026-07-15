@@ -40,7 +40,7 @@ write_lines /etc/sudoers \
 chsh -s /usr/bin/fish retro-boy
 echo_lines \
     'alias --save clear-history="echo yes | history clear"' \
-    'alias lz="eza --icons --sort=type --all"' \
+    'alias --save lz="eza --icons --sort=type --all"' \
     'echo y | fish_config prompt save scales' \
     'set -Ux LANG en_US.UTF-8' \
     'set -U fish_greeting' \
