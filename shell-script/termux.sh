@@ -29,7 +29,7 @@ write_lines() {
 # ==============================
 termux-change-repo
 yes | pkg upgrade
-yes | pkg install sudo fish proot-distro
+yes | pkg install sudo fish proot-distro eza
 
 curl -sSL https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o ~/.termux/colors.properties
 curl -sSL https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o ~/.termux/font.ttf
@@ -50,6 +50,7 @@ chsh -s fish
 echo_lines \
     'alias --save fedora="proot-distro login fedora --bind /storage/emulated/0/:/android --user retro-boy --isolated"' \
     'alias --save fdr-rt="proot-distro login fedora --bind /storage/emulated/0/:/android --user root --isolated"' \
+    'alias --save lz="eza --icons --sort=type --all"' \
     'alias --save clear-history="echo yes | history clear"' \
     'echo y | fish_config prompt save arrow' \
     'set -U fish_greeting' \
