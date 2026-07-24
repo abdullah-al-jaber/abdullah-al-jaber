@@ -31,8 +31,8 @@ termux-change-repo
 yes | pkg upgrade
 yes | pkg install sudo fish proot-distro eza
 
-curl -sSL https://raw.githubusercontent.com/adi1090x/termux-style/refs/heads/master/colors/smyck.properties -o ~/.termux/colors.properties
-curl -sSL https://raw.githubusercontent.com/ryanoasis/nerd-fonts/refs/heads/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf -o ~/.termux/font.ttf
+curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/termux-file/RetroBoy.properties -o ~/.termux/colors.properties
+curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/termux-file/JetBrainsMono.ttf -o ~/.termux/font.ttf
 write_lines ~/.termux/termux.properties \
     'disable-terminal-session-change-toast = true' \
     'terminal-transcript-rows = 8000' \
