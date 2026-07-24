@@ -31,7 +31,7 @@ termux-change-repo
 yes | pkg upgrade
 yes | pkg install sudo fish proot-distro eza
 
-curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/termux-file/Dracula.properties -o ~/.termux/colors.properties
+curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/termux-file/RetroBoy.properties -o ~/.termux/colors.properties
 curl -sSL https://abdullah-al-jaber.github.io/abdullah-al-jaber/termux-file/JetBrainsMono.ttf -o ~/.termux/font.ttf
 write_lines ~/.termux/termux.properties \
     'disable-terminal-session-change-toast = true' \
