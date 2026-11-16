@@ -19,7 +19,7 @@ class ChatGPT:
         "email_login": "https://chatgpt.com/login",
         "password_login": "https://auth.openai.com/log-in/password",
         "email_auth": "https://auth.openai.com/email-verification",
-        "push_auth": "https://auth.openai.com/push-auth-verification/*",
+        "push_auth": "https://auth.openai.com/push-auth-verification",
     }
 
     selectors = {
@@ -55,7 +55,7 @@ class ChatGPT:
     })();
     """
 
-    delay = 1.25
+    click_delay = 1_250
     authorize_timeout = 300_000
     response_timeout: float = 150_000
     read_aloud_timeout: float = 300_000
@@ -75,37 +75,55 @@ class ChatGPT:
         assert self.page.url != self.urls["homepage"], "Account Check Homepage Mismatch !"
         return any(cookie.get("name") == "_account" for cookie in await self.page.context.cookies())
 
-    async def element_click(self, selector: str, delay: float = delay, parent: playwright.async_api.Locator | None = None, **options):
+    async def element_click(self, selector: str, click_delay: float = click_delay, parent: playwright.async_api.Locator | None = None, **options):
         element = (parent or self.page).locator(selector, **options)
         await element.wait_for(state="visible")
         await element.scroll_into_view_if_needed()
         bounding_box = await element.bounding_box()
         assert bounding_box, "Bounding Box isn't found !"
         await self.page.mouse.click(bounding_box["x"] + bounding_box["width"] / 2, bounding_box["y"] + bounding_box["height"] / 2)
-        await asyncio.sleep(delay)
+        await asyncio.sleep(click_delay / 1000)
 
     async def login(self, authorize_timeout: float = authorize_timeout):
         await self.page.goto(self.urls["email_login"], wait_until="load")
-        email = rich.prompt.Prompt.ask("[ EMAIL ] > ", console=console)
-        await self.page.fill(self.selectors["email_login_field"], email)
-        await self.element_click(self.selectors["submit_button"], has_text="Continue")
 
-        await self.page.wait_for_url(self.urls["password_login"], wait_until="load")
-        password = rich.prompt.Prompt.ask("[ PASSWORD ] > ", console=console)
-        await self.page.fill(self.selectors["password_login_field"], password)
-        await self.element_click(self.selectors["submit_button"], has_text="Continue")
+        async def email_login():
+            email = rich.prompt.Prompt.ask("[ EMAIL ] > ", console=console)
+            await self.page.fill(self.selectors["email_login_field"], email)
+            await self.element_click(self.selectors["submit_button"], has_text="Continue")
 
-        await self.page.wait_for_url(lambda url: url in (self.urls["email_auth"], self.urls["push_auth"]), wait_until="load")
-        async with self.page.expect_navigation(timeout=authorize_timeout):
-            if self.page.url == self.urls["email_auth"]:
-                console.print("Email Verification Code Sent !")
-                code = rich.prompt.Prompt.ask("[ CODE ] > ", console=console)
-                await self.page.fill(self.selectors["email_auth_field"], code)
-                await self.element_click(self.selectors["submit_button"], has_text="Continue")
-            elif self.page.url == self.urls["push_auth"]:
-                console.print("Authorize on Your Phone ! Quick !")
+        async def password_login():
+            password = rich.prompt.Prompt.ask("[ PASSWORD ] > ", console=console)
+            await self.page.fill(self.selectors["password_login_field"], password)
+            await self.element_click(self.selectors["submit_button"], has_text="Continue")
+
+        async def email_auth():
+            console.print("Email Verification Code Sent !")
+            code = rich.prompt.Prompt.ask("[ CODE ] > ", console=console)
+            await self.page.fill(self.selectors["email_auth_field"], code)
+            await self.element_click(self.selectors["submit_button"], has_text="Continue")
+
+        async def push_auth():
+            console.print("Authorize on Your Phone ! Quick !")
+
+        handlers = {
+            self.urls["email_login"]: email_login,
+            self.urls["password_login"]: password_login,
+            self.urls["email_auth"]: email_auth,
+            self.urls["push_auth"]: push_auth,
+        }
+
+        while self.page.url.strip("/") in self.urls.values() or self.page.url.startswith(self.urls["push_auth"]):
+            if self.page.url.startswith(self.urls["homepage"]):
+                return console.print("You are logged in !")
+            handler = handlers[self.page.url]
+            old_url = self.page.url
+            async with self.page.expect_navigation(url=lambda new_url: new_url != old_url, wait_until="load", timeout=authorize_timeout):
+                await handler()
+        raise Exception(f"UNKNOWN URL: '{self.page.url}' !")
 
     async def chat(self, text: str, response_timeout: float = response_timeout) -> str:
+        assert self.page.url.startswith(self.urls["homepage"]), "Page is not on Home Page !"
         await self.page.fill(self.selectors["prompt_box"], text)
         await self.element_click(self.selectors["send_button"])
         await self.page.wait_for_selector(self.selectors["voice_button"], timeout=response_timeout)
@@ -118,6 +136,7 @@ class ChatGPT:
         return output
 
     async def tts(self, text: str, read_aloud_timeout: float = read_aloud_timeout) -> bytes:
+        assert self.page.url.startswith(self.urls["homepage"]), "Page is not on Home Page !"
         assert text == await self.chat(f"REPEAT TEXT: '{text}'"), "Text Mismatch !"
         async with self.page.expect_response(
             lambda resp: "backend-api/synthesize" in resp.url and resp.status == 200, timeout=read_aloud_timeout
